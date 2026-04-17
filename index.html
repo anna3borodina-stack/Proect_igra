@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Сияние NEWGOLD — короткая игра про символ ювелирного бренда NEWGOLD." />
+  <title>Сияние NEWGOLD</title>
+  <link rel="stylesheet" href="css/game.css" />
+</head>
+<body>
+  <div id="app" class="app">
+    <header class="brand-bar" aria-hidden="true">
+      <div class="brand-bar__logo" id="watermark-logo"></div>
+    </header>
+
+    <!-- Старт -->
+    <section id="screen-start" class="screen screen--active" aria-labelledby="start-title">
+      <div class="panel">
+        <h1 id="start-title" class="title">Сияние NEWGOLD</h1>
+        <p class="lead">Короткая игра про символ NEWGOLD. Займёт несколько минут.</p>
+        <button type="button" class="btn btn--primary" id="btn-start">Начать</button>
+        <p class="fineprint">Игра бесплатная, регистрация не нужна.</p>
+      </div>
+    </section>
+
+    <!-- Шаг 1: Искра -->
+    <section id="screen-step1" class="screen" aria-labelledby="step1-title" hidden>
+      <div class="panel panel--narrow">
+        <p class="step-label">Шаг 1 из 3. Искра</p>
+        <h2 id="step1-title" class="subtitle">Зажгите первые блики</h2>
+        <p class="hint hint--intro" id="step1-intro">Поймайте блики, пока они не погасли.</p>
+        <div id="spark-field" class="spark-field" role="application" aria-label="Поле с бликами"></div>
+        <p class="progress" id="spark-progress" aria-live="polite">Поймано: 0 / 8</p>
+        <button type="button" class="btn btn--ghost" id="btn-step1-next" hidden>Дальше</button>
+      </div>
+    </section>
+
+    <!-- Шаг 2: Форма -->
+    <section id="screen-step2" class="screen" aria-labelledby="step2-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 2 из 3. Форма</p>
+        <h2 id="step2-title" class="subtitle">Соберите символ NEWGOLD</h2>
+        <p class="hint">Двигайте ползунок, пока символ не сложится целиком.</p>
+        <div class="assemble">
+          <div class="assemble__viewport" id="assemble-viewport" aria-hidden="true"></div>
+          <label class="assemble__label" for="assemble-range">Сборка символа</label>
+          <input type="range" id="assemble-range" class="assemble__range" min="0" max="100" value="0" />
+        </div>
+        <button type="button" class="btn btn--primary" id="btn-step2-next" disabled>Дальше</button>
+      </div>
+    </section>
+
+    <!-- Шаг 3: Сияние -->
+    <section id="screen-step3" class="screen" aria-labelledby="step3-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 3 из 3. Сияние</p>
+        <h2 id="step3-title" class="subtitle">Выберите, как сияет символ NEWGOLD</h2>
+        <div class="shine-options" role="radiogroup" aria-label="Вариант сияния">
+          <button type="button" class="shine-card shine-card--selected" data-shine="warm" aria-checked="true" role="radio">
+            <span class="shine-card__preview shine-card__preview--warm"></span>
+            <span class="shine-card__name">Тёплое золото</span>
+          </button>
+          <button type="button" class="shine-card" data-shine="cool" aria-checked="false" role="radio">
+            <span class="shine-card__preview shine-card__preview--cool"></span>
+            <span class="shine-card__name">Холодный блик</span>
+          </button>
+          <button type="button" class="shine-card" data-shine="teal" aria-checked="false" role="radio">
+            <span class="shine-card__preview shine-card__preview--teal"></span>
+            <span class="shine-card__name">Бирюзовый отблеск</span>
+          </button>
+        </div>
+        <button type="button" class="btn btn--primary" id="btn-step3-done">Готово</button>
+      </div>
+    </section>
+
+    <!-- Финал -->
+    <section id="screen-end" class="screen" aria-labelledby="end-title" hidden>
+      <div class="panel">
+        <h2 id="end-title" class="title title--small">Готово</h2>
+        <p class="lead">Символ NEWGOLD сияет. Сохраните картинку или поделитесь с близкими.</p>
+        <div id="result-card" class="result-card">
+          <div class="result-card__inner" id="result-inner">
+            <div class="result-card__symbol" id="result-symbol"></div>
+            <p class="result-card__brand">NEWGOLD</p>
+            <p class="result-card__tag">ювелирный завод</p>
+            <p class="result-card__game">Сияние NEWGOLD</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn--primary" id="btn-save">Сохранить картинку</button>
+          <button type="button" class="btn btn--secondary" id="btn-share">Поделиться</button>
+        </div>
+        <div class="soft-cta">
+          <p class="soft-cta__title">Узнать о коллекциях NEWGOLD</p>
+          <p class="soft-cta__text">Оставьте почту — пришлём lookbook и новости. Без лишних писем.</p>
+          <form id="lead-form" class="lead-form" novalidate>
+            <input type="email" name="email" class="lead-form__input" placeholder="Почта" autocomplete="email" />
+            <button type="submit" class="btn btn--ghost">Получить lookbook</button>
+          </form>
+          <a href="#" class="link-showroom" id="link-showroom">Записаться в шоурум</a>
+        </div>
+        <button type="button" class="btn btn--ghost" id="btn-replay">Играть снова</button>
+      </div>
+    </section>
+
+    <!-- Ошибка -->
+    <section id="screen-error" class="screen" aria-labelledby="error-title" hidden>
+      <div class="panel">
+        <h2 id="error-title" class="title title--small">Игра не загрузилась</h2>
+        <p class="lead">Проверьте интернет и обновите страницу. Если не поможет — зайдите позже.</p>
+        <button type="button" class="btn btn--primary" id="btn-reload">Обновить страницу</button>
+      </div>
+    </section>
+
+    <!-- Скрытый canvas для экспорта -->
+    <canvas id="export-canvas" width="800" height="1000" hidden></canvas>
+  </div>
+
+  <script src="js/game.js" defer></script>
+</body>
+</html>
