@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <!-- Сияние NEWGOLD · сборка: украшения-SVG + тёплый фон (обновите GitHub Pages после push) -->
-<html lang="ru">
+<html lang="ru" class="warm-bg">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Сияние NEWGOLD — игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=17" />
+  <link rel="stylesheet" href="css/game.css?v=19" />
+  <!-- Фон: дублируем критичный градиент здесь, чтобы не терялся при кэше старого game.css -->
+  <style>
+    html.warm-bg {
+      min-height: 100%;
+      background-color: #e5c4a8;
+      background-image: linear-gradient(
+        168deg,
+        #fdf6ee 0%,
+        #f5e3d4 22%,
+        #ebcfb8 48%,
+        #e0b89a 72%,
+        #d4a078 100%
+      );
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
 </head>
-<body>
+<body style="background: transparent">
   <div id="app" class="app">
     <div id="game-progress" class="game-progress" hidden aria-hidden="true">
       <p class="game-progress__text" id="game-progress-text">Шаг 1 из 10</p>
@@ -176,7 +194,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=17"
+              src="assets/logo-newgold-brand.png?v=19"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -221,6 +239,6 @@
   </div>
 
 
-  <script src="js/game.js?v=17" defer></script>
+  <script src="js/game.js?v=19" defer></script>
 </body>
 </html>

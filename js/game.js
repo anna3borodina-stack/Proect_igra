@@ -1,10 +1,17 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=17";
-  var ASSET_VER = "17";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=19";
+  var ASSET_VER = "19";
   var JEWEL_IMG_RING = "assets/jewel-ring-rose-heart.png";
   var JEWEL_IMG_NECKLACE = "assets/jewel-necklace-ruby.png";
+  /* Шесть подвесок с баннера, нарезаны по отдельности: jewel-strip-6.png → jewel-pendant-1…6 */
+  var JEWEL_IMG_P1 = "assets/jewel-pendant-1.png";
+  var JEWEL_IMG_P2 = "assets/jewel-pendant-2.png";
+  var JEWEL_IMG_P3 = "assets/jewel-pendant-3.png";
+  var JEWEL_IMG_P4 = "assets/jewel-pendant-4.png";
+  var JEWEL_IMG_P5 = "assets/jewel-pendant-5.png";
+  var JEWEL_IMG_P6 = "assets/jewel-pendant-6.png";
 
   var TOTAL_STEPS = 10;
 
@@ -12,12 +19,6 @@
   var JEWEL_LIFETIME_MS = 3000;
   var LIVES_MAX = 3;
   var SPARK_TARGET = 10;
-
-  function jewelFace(emoji) {
-    return (
-      '<span class="jewel-item__face" aria-hidden="true">' + emoji + "</span>"
-    );
-  }
 
   function jewelContent(piece) {
     if (piece.img) {
@@ -34,13 +35,13 @@
 
   var JEWELRY_TYPES = [
     { label: "Кольцо", cls: "jewel-item--ring", img: JEWEL_IMG_RING },
-    { label: "Серьги", cls: "jewel-item--earrings", html: jewelFace("\u{1F48E}") },
-    { label: "Браслет", cls: "jewel-item--bracelet", html: jewelFace("\u{1F517}") },
+    { label: "Серьги", cls: "jewel-item--earrings", img: JEWEL_IMG_P2 },
+    { label: "Браслет", cls: "jewel-item--bracelet", img: JEWEL_IMG_P4 },
     { label: "Колье", cls: "jewel-item--necklace", img: JEWEL_IMG_NECKLACE },
-    { label: "Брошь", cls: "jewel-item--brooch", html: jewelFace("\u{1F4A0}") },
-    { label: "Подвеска", cls: "jewel-item--pendant", img: JEWEL_IMG_NECKLACE },
-    { label: "Цепь", cls: "jewel-item--chain", html: jewelFace("\u{26D3}\u{FE0F}") },
-    { label: "Диадема", cls: "jewel-item--watch", html: jewelFace("\u{1F451}") },
+    { label: "Брошь", cls: "jewel-item--brooch", img: JEWEL_IMG_P5 },
+    { label: "Подвеска", cls: "jewel-item--pendant", img: JEWEL_IMG_P1 },
+    { label: "Цепь", cls: "jewel-item--chain", img: JEWEL_IMG_P3 },
+    { label: "Диадема", cls: "jewel-item--watch", img: JEWEL_IMG_P6 },
   ];
 
   var QUEST_NEED = {};
