@@ -33,19 +33,22 @@ body {
   font-family: var(--font);
   font-weight: 400;
   color: var(--ink);
-  background:
-    radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.45) 0%, transparent 55%),
-    linear-gradient(
-      168deg,
-      #8ec4d4 0%,
-      #b0dae6 18%,
-      #c8e6ec 36%,
-      #d8ebe8 52%,
-      #e8dcc8 72%,
-      var(--sand) 88%,
-      var(--sand-warm) 100%
-    );
+  background-color: #7ec8cf;
+  background-image: url("assets/bg-newgold-spring.png?v=11");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   line-height: 1.45;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 252, 248, 0.28);
+  pointer-events: none;
 }
 
 .app {
@@ -55,6 +58,7 @@ body {
   align-items: center;
   padding: 1rem 1rem 2rem;
   position: relative;
+  z-index: 1;
 }
 
 /* Логотип на экране «Готово» — без белой плашки-обёртки */
@@ -95,6 +99,11 @@ body {
 .panel {
   width: 100%;
   padding: 1.25rem;
+  background: rgba(255, 252, 248, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .panel--narrow {
@@ -204,24 +213,20 @@ body {
   height: min(52vh, 320px);
   margin: 0 auto 0.75rem;
   border-radius: var(--radius);
-  background: linear-gradient(
-    175deg,
-    rgba(180, 220, 232, 0.55) 0%,
-    rgba(210, 235, 238, 0.75) 38%,
-    rgba(238, 228, 210, 0.95) 72%,
-    rgba(232, 210, 180, 0.9) 100%
-  );
-  border: 1px solid rgba(90, 130, 150, 0.2);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
   overflow: hidden;
   touch-action: manipulation;
 }
 
 .jewel-item {
   position: absolute;
-  width: 54px;
-  height: 54px;
-  margin: -27px 0 0 -27px;
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
   border: none;
   border-radius: 16px;
   display: flex;
@@ -238,11 +243,12 @@ body {
   animation: jewelPulse 1.15s ease-in-out infinite;
 }
 
-.jewel-item svg {
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
+.jewel-item__face {
+  font-size: 1.95rem;
+  line-height: 1;
+  display: block;
   pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
 }
 
 .jewel-item--earrings {
@@ -320,8 +326,10 @@ body {
   height: 280px;
   margin: 0 auto 1rem;
   border-radius: var(--radius);
-  background: linear-gradient(160deg, rgba(230, 245, 248, 0.92) 0%, rgba(248, 238, 220, 0.95) 100%);
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -434,9 +442,11 @@ body {
   max-width: 320px;
   margin: 0 auto 1.25rem;
   border-radius: var(--radius);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   overflow: hidden;
-  background: var(--bg-elevated);
+  background: rgba(255, 252, 248, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .result-card__inner {

@@ -2,61 +2,27 @@
   "use strict";
 
   /* Тот же файл, что у <img class="result-card__logo"> на экране «Готово» */
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=10";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=11";
 
   var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
   var JEWEL_LIFETIME_MS = 2200;
 
+  function jewelFace(emoji) {
+    return (
+      '<span class="jewel-item__face" aria-hidden="true">' + emoji + "</span>"
+    );
+  }
+
   var JEWELRY_TYPES = [
-    {
-      label: "Кольцо",
-      cls: "jewel-item--ring",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="20" cy="22" rx="10" ry="7"/><polygon points="20,8 24.5,15 20,17 15.5,15"/></g></svg>',
-    },
-    {
-      label: "Серьги",
-      cls: "jewel-item--earrings",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 9v10c0 3.2 2.4 5.5 6 5.5s6-2.3 6-5.5V9"/><circle cx="15" cy="28" r="4"/><path d="M25 9v10c0 3.2 2.4 5.5 6 5.5s6-2.3 6-5.5V9"/><circle cx="31" cy="28" r="4"/></g></svg>',
-    },
-    {
-      label: "Браслет",
-      cls: "jewel-item--bracelet",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 25c2.5-11 19.5-11 22 0" stroke-width="1.75"/><circle cx="14" cy="22" r="2.3" stroke-width="1.45"/><circle cx="20" cy="19" r="2.3" stroke-width="1.45"/><circle cx="26" cy="22" r="2.3" stroke-width="1.45"/></g></svg>',
-    },
-    {
-      label: "Колье",
-      cls: "jewel-item--necklace",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"><path d="M5 14c8 13 22 13 30 0" stroke-width="1.65"/><circle cx="11" cy="18" r="2"/><circle cx="20" cy="22" r="2"/><circle cx="29" cy="18" r="2"/><circle cx="20" cy="31" r="4" stroke-width="1.6"/></g></svg>',
-    },
-    {
-      label: "Брошь",
-      cls: "jewel-item--brooch",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><line x1="5" y1="20" x2="35" y2="20"/><path d="M20 9l7 11-7 11-7-11z"/></g></svg>',
-    },
-    {
-      label: "Подвеска",
-      cls: "jewel-item--pendant",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v11"/><path d="M14 7h12"/><path d="M20 22c-5.5 0-9 4.5-9 10h18c0-5.5-3.5-10-9-10z"/></g></svg>',
-    },
-    {
-      label: "Цепь",
-      cls: "jewel-item--chain",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.65"><ellipse cx="11" cy="20" rx="5.5" ry="8.5"/><ellipse cx="20" cy="20" rx="5.5" ry="8.5"/><ellipse cx="29" cy="20" rx="5.5" ry="8.5"/></g></svg>',
-    },
-    {
-      label: "Часы",
-      cls: "jewel-item--watch",
-      svg:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="20" cy="20" r="12.5"/><line x1="20" y1="20" x2="20" y2="12"/><line x1="20" y1="20" x2="26.5" y2="22"/><circle cx="20" cy="20" r="1.4" fill="currentColor" stroke="none"/></g></svg>',
-    },
+    { label: "Кольцо", cls: "jewel-item--ring", html: jewelFace("\u{1F48D}") },
+    { label: "Серьги", cls: "jewel-item--earrings", html: jewelFace("\u{1F48E}") },
+    { label: "Браслет", cls: "jewel-item--bracelet", html: jewelFace("\u{1F517}") },
+    { label: "Колье", cls: "jewel-item--necklace", html: jewelFace("\u{1F4FF}") },
+    { label: "Брошь", cls: "jewel-item--brooch", html: jewelFace("\u{1F4A0}") },
+    { label: "Подвеска", cls: "jewel-item--pendant", html: jewelFace("\u{1F9FF}") },
+    { label: "Цепь", cls: "jewel-item--chain", html: jewelFace("\u{26D3}\u{FE0F}") },
+    { label: "Диадема", cls: "jewel-item--watch", html: jewelFace("\u{1F451}") },
   ];
 
   var shine = "warm";
@@ -169,7 +135,7 @@
     sp.style.left = x + "px";
     sp.style.top = y + "px";
     sp.setAttribute("aria-label", "Собрать: " + piece.label);
-    sp.innerHTML = piece.svg;
+    sp.innerHTML = piece.html;
 
     var dead = false;
     function removeJewel() {
