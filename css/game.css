@@ -58,16 +58,8 @@ body {
   position: relative;
 }
 
-/* Блок логотипа на экране «Готово» (тот же PNG, что в экспорте картинки) */
-.logo-plaque {
-  background: #ffffff;
-  padding: 0.65rem 1rem;
-  border-radius: var(--radius);
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.logo-plaque__img {
+/* Логотип на экране «Готово» — без белой плашки-обёртки */
+.result-card__logo {
   display: block;
   width: min(300px, 92vw);
   height: auto;
@@ -461,7 +453,7 @@ body {
   box-shadow: inset 0 0 60px rgba(255, 210, 140, 0.25);
 }
 
-.result-card__inner--warm .logo-plaque__img {
+.result-card__inner--warm .result-card__logo {
   filter: drop-shadow(0 0 18px rgba(212, 165, 80, 0.55));
 }
 
@@ -470,7 +462,7 @@ body {
   box-shadow: inset 0 0 50px rgba(180, 200, 240, 0.35);
 }
 
-.result-card__inner--cool .logo-plaque__img {
+.result-card__inner--cool .result-card__logo {
   filter: drop-shadow(0 0 16px rgba(160, 190, 230, 0.5));
 }
 
@@ -479,7 +471,7 @@ body {
   box-shadow: inset 0 0 55px rgba(150, 199, 199, 0.4);
 }
 
-.result-card__inner--teal .logo-plaque__img {
+.result-card__inner--teal .result-card__logo {
   filter: drop-shadow(0 0 18px rgba(120, 180, 180, 0.5));
 }
 
