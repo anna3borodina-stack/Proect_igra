@@ -6,10 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Сияние NEWGOLD — игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=15" />
+  <link rel="stylesheet" href="css/game.css?v=16" />
 </head>
 <body>
   <div id="app" class="app">
+    <div id="game-progress" class="game-progress" hidden aria-hidden="true">
+      <p class="game-progress__text" id="game-progress-text">Шаг 1 из 10</p>
+      <div
+        class="game-progress__bar"
+        id="game-progress-bar"
+        role="progressbar"
+        aria-valuemin="1"
+        aria-valuemax="10"
+        aria-valuenow="1"
+        aria-label="Прогресс игры"
+      >
+        <div class="game-progress__fill" id="game-progress-fill"></div>
+      </div>
+    </div>
     <section id="screen-start" class="screen screen--active" aria-labelledby="start-title">
       <div class="panel">
         <h1 id="start-title" class="title">Сияние NEWGOLD</h1>
@@ -162,7 +176,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=15"
+              src="assets/logo-newgold-brand.png?v=16"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -207,6 +221,6 @@
   </div>
 
 
-  <script src="js/game.js?v=15" defer></script>
+  <script src="js/game.js?v=16" defer></script>
 </body>
 </html>

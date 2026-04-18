@@ -1,7 +1,9 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=15";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=16";
+
+  var TOTAL_STEPS = 10;
 
   var SPAWN_MS = 1300;
   var JEWEL_LIFETIME_MS = 3000;
@@ -83,6 +85,10 @@
     leadForm: document.getElementById("lead-form"),
     linkShowroom: document.getElementById("link-showroom"),
     exportCanvas: document.getElementById("export-canvas"),
+    gameProgress: document.getElementById("game-progress"),
+    gameProgressText: document.getElementById("game-progress-text"),
+    gameProgressFill: document.getElementById("game-progress-fill"),
+    gameProgressBar: document.getElementById("game-progress-bar"),
   };
 
   var assembleMark = null;
@@ -161,6 +167,40 @@
     showScreen("screen-gameover");
   }
 
+  function stepForScreen(screenId) {
+    var map = {
+      "screen-step1": 1,
+      "screen-step2": 2,
+      "screen-step3": 3,
+      "screen-step4": 4,
+      "screen-step5": 5,
+      "screen-step6": 6,
+      "screen-step7": 7,
+      "screen-step8": 8,
+      "screen-step9": 9,
+      "screen-end": 10,
+    };
+    return map[screenId] || 0;
+  }
+
+  function updateGameProgress(screenId) {
+    if (!els.gameProgress || !els.gameProgressText || !els.gameProgressFill) return;
+    var step = stepForScreen(screenId);
+    if (step < 1) {
+      els.gameProgress.hidden = true;
+      els.gameProgress.setAttribute("aria-hidden", "true");
+      return;
+    }
+    els.gameProgress.hidden = false;
+    els.gameProgress.setAttribute("aria-hidden", "false");
+    els.gameProgressText.textContent = "Шаг " + step + " из " + TOTAL_STEPS;
+    els.gameProgressFill.style.width = (step / TOTAL_STEPS) * 100 + "%";
+    if (els.gameProgressBar) {
+      els.gameProgressBar.setAttribute("aria-valuenow", String(step));
+      els.gameProgressBar.setAttribute("aria-valuemax", String(TOTAL_STEPS));
+    }
+  }
+
   function showScreen(screenId) {
     Object.keys(els.screens).forEach(function (key) {
       var s = els.screens[key];
@@ -170,6 +210,7 @@
       s.classList.toggle("screen--active", isMatch);
       s.setAttribute("aria-hidden", isMatch ? "false" : "true");
     });
+    updateGameProgress(screenId);
   }
 
   function initAssembleViewport() {
