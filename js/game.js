@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-hero.png";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png";
 
   var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
