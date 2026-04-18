@@ -33,8 +33,9 @@ body {
   font-family: var(--font);
   font-weight: 400;
   color: var(--ink);
+  /* Путь относительно css/game.css → ../assets/ */
   background-color: #7ec8cf;
-  background-image: url("assets/bg-newgold-spring.png?v=11");
+  background-image: url("../assets/bg-newgold-spring.png?v=12");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -47,7 +48,7 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background: rgba(255, 252, 248, 0.28);
+  background: rgba(255, 252, 248, 0.18);
   pointer-events: none;
 }
 

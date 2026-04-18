@@ -2,7 +2,7 @@
   "use strict";
 
   /* Тот же файл, что у <img class="result-card__logo"> на экране «Готово» */
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=11";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=12";
 
   var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
