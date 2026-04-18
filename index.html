@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<!-- Сияние NEWGOLD: разметка в index.html, стили — css/game.css, логика — js/game.js -->
+<!-- Сияние NEWGOLD · сборка: украшения-SVG + тёплый фон (обновите GitHub Pages после push) -->
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Сияние NEWGOLD — короткая игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css" />
+  <link rel="stylesheet" href="css/game.css?v=3" />
 </head>
 <body>
   <div id="app" class="app">
-    <header class="brand-bar" aria-hidden="true">
-      <div class="brand-bar__logo" id="watermark-logo"></div>
+    <header class="brand-bar">
+      <img
+        class="brand-bar__logo-img"
+        src="assets/logo-newgold-full.png"
+        width="260"
+        height="72"
+        alt="NEWGOLD — ювелирный завод"
+      />
     </header>
 
     <section id="screen-start" class="screen screen--active" aria-labelledby="start-title">
@@ -25,11 +31,13 @@
 
     <section id="screen-step1" class="screen" aria-labelledby="step1-title" hidden>
       <div class="panel panel--narrow">
-        <p class="step-label">Шаг 1 из 3. Искра</p>
-        <h2 id="step1-title" class="subtitle">Зажгите первые блики</h2>
-        <p class="hint hint--intro" id="step1-intro">Поймайте блики, пока они не погасли.</p>
-        <div id="spark-field" class="spark-field" role="application" aria-label="Поле с бликами"></div>
-        <p class="progress" id="spark-progress" aria-live="polite">Поймано: 0 / 8</p>
+        <p class="step-label">Шаг 1 из 3. Коллекция</p>
+        <h2 id="step1-title" class="subtitle">Соберите украшения</h2>
+        <p class="hint hint--intro" id="step1-intro">
+          Нажимайте на кольца, серьги, браслеты, колье и другие изделия, пока они не исчезли.
+        </p>
+        <div id="jewel-field" class="jewel-field" role="application" aria-label="Поле с украшениями"></div>
+        <p class="progress" id="jewel-progress" aria-live="polite">Собрано: 0 / 8</p>
         <button type="button" class="btn btn--ghost" id="btn-step1-next" hidden>Дальше</button>
       </div>
     </section>
@@ -76,9 +84,13 @@
         <p class="lead">Символ NEWGOLD сияет. Сохраните картинку или поделитесь с близкими.</p>
         <div id="result-card" class="result-card">
           <div class="result-card__inner" id="result-inner">
-            <div class="result-card__symbol" id="result-symbol"></div>
-            <p class="result-card__brand">NEWGOLD</p>
-            <p class="result-card__tag">ювелирный завод</p>
+            <img
+              class="result-card__logo-full"
+              src="assets/logo-newgold-full.png"
+              width="280"
+              height="78"
+              alt="NEWGOLD — ювелирный завод"
+            />
             <p class="result-card__game">Сияние NEWGOLD</p>
           </div>
         </div>
@@ -111,6 +123,6 @@
   </div>
 
 
-  <script src="js/game.js" defer></script>
+  <script src="js/game.js?v=3" defer></script>
 </body>
 </html>

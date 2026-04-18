@@ -1,15 +1,65 @@
 (function () {
   "use strict";
 
-  var NEWGOLD_LOGO_DATA_URI =
-    "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20fill%3D%22none%22%3E%3Cg%20stroke%3D%22%23111111%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M60%2018c-6.5%200-12.5%203.2-16%208.5a18%2018%200%201%200-17.3%2031.3A18%2018%200%201%200%2060%20102a18%2018%200%201%200%2033.3-44.2A18%2018%200%201%200%2076%2026.5c-3.5-5.3-9.5-8.5-16-8.5z%22%2F%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2244%22%20rx%3D%2216%22%20ry%3D%2222%22%2F%3E%3Cellipse%20cx%3D%2244%22%20cy%3D%2276%22%20rx%3D%2216%22%20ry%3D%2222%22%20transform%3D%22rotate(60%2044%2076)%22%2F%3E%3Cellipse%20cx%3D%2276%22%20cy%3D%2276%22%20rx%3D%2216%22%20ry%3D%2222%22%20transform%3D%22rotate(-60%2076%2076)%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E";
+  var FULL_LOGO_SRC = "assets/logo-newgold-full.png";
 
-  var SPARKS_GOAL = 8;
+  var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
-  var SPARK_LIFETIME_MS = 2200;
+  var JEWEL_LIFETIME_MS = 2200;
+
+  var JEWELRY_TYPES = [
+    {
+      label: "Кольцо",
+      cls: "jewel-item--ring",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="20" cy="22" rx="10" ry="7"/><polygon points="20,8 24.5,15 20,17 15.5,15"/></g></svg>',
+    },
+    {
+      label: "Серьги",
+      cls: "jewel-item--earrings",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 9v10c0 3.2 2.4 5.5 6 5.5s6-2.3 6-5.5V9"/><circle cx="15" cy="28" r="4"/><path d="M25 9v10c0 3.2 2.4 5.5 6 5.5s6-2.3 6-5.5V9"/><circle cx="31" cy="28" r="4"/></g></svg>',
+    },
+    {
+      label: "Браслет",
+      cls: "jewel-item--bracelet",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 25c2.5-11 19.5-11 22 0" stroke-width="1.75"/><circle cx="14" cy="22" r="2.3" stroke-width="1.45"/><circle cx="20" cy="19" r="2.3" stroke-width="1.45"/><circle cx="26" cy="22" r="2.3" stroke-width="1.45"/></g></svg>',
+    },
+    {
+      label: "Колье",
+      cls: "jewel-item--necklace",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"><path d="M5 14c8 13 22 13 30 0" stroke-width="1.65"/><circle cx="11" cy="18" r="2"/><circle cx="20" cy="22" r="2"/><circle cx="29" cy="18" r="2"/><circle cx="20" cy="31" r="4" stroke-width="1.6"/></g></svg>',
+    },
+    {
+      label: "Брошь",
+      cls: "jewel-item--brooch",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><line x1="5" y1="20" x2="35" y2="20"/><path d="M20 9l7 11-7 11-7-11z"/></g></svg>',
+    },
+    {
+      label: "Подвеска",
+      cls: "jewel-item--pendant",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v11"/><path d="M14 7h12"/><path d="M20 22c-5.5 0-9 4.5-9 10h18c0-5.5-3.5-10-9-10z"/></g></svg>',
+    },
+    {
+      label: "Цепь",
+      cls: "jewel-item--chain",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.65"><ellipse cx="11" cy="20" rx="5.5" ry="8.5"/><ellipse cx="20" cy="20" rx="5.5" ry="8.5"/><ellipse cx="29" cy="20" rx="5.5" ry="8.5"/></g></svg>',
+    },
+    {
+      label: "Часы",
+      cls: "jewel-item--watch",
+      svg:
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="20" cy="20" r="12.5"/><line x1="20" y1="20" x2="20" y2="12"/><line x1="20" y1="20" x2="26.5" y2="22"/><circle cx="20" cy="20" r="1.4" fill="currentColor" stroke="none"/></g></svg>',
+    },
+  ];
 
   var shine = "warm";
-  var sparksCaught = 0;
+  var jewelryCaught = 0;
   var spawnTimer = null;
 
   var els = {
@@ -21,8 +71,8 @@
       end: document.getElementById("screen-end"),
       error: document.getElementById("screen-error"),
     },
-    sparkField: document.getElementById("spark-field"),
-    sparkProgress: document.getElementById("spark-progress"),
+    jewelField: document.getElementById("jewel-field"),
+    jewelProgress: document.getElementById("jewel-progress"),
     btnStep1Next: document.getElementById("btn-step1-next"),
     assembleRange: document.getElementById("assemble-range"),
     assembleViewport: document.getElementById("assemble-viewport"),
@@ -73,9 +123,9 @@
   }
 
   function resetStep1() {
-    sparksCaught = 0;
-    els.sparkField.innerHTML = "";
-    els.sparkProgress.textContent = "Поймано: 0 / " + SPARKS_GOAL;
+    jewelryCaught = 0;
+    els.jewelField.innerHTML = "";
+    els.jewelProgress.textContent = "Собрано: 0 / " + JEWELRY_GOAL;
     els.btnStep1Next.hidden = true;
     if (spawnTimer) clearInterval(spawnTimer);
     spawnTimer = null;
@@ -84,57 +134,63 @@
   function startStep1Spawning() {
     if (spawnTimer) clearInterval(spawnTimer);
     spawnTimer = setInterval(function () {
-      if (sparksCaught >= SPARKS_GOAL) {
+      if (jewelryCaught >= JEWELRY_GOAL) {
         clearInterval(spawnTimer);
         spawnTimer = null;
         return;
       }
-      spawnSpark();
+      spawnJewel();
     }, SPAWN_MS);
-    spawnSpark();
+    spawnJewel();
   }
 
-  var activeSparks = 0;
+  var activeJewels = 0;
 
-  function spawnSpark() {
-    if (sparksCaught >= SPARKS_GOAL) return;
-    if (activeSparks >= 5) return;
+  function pickJewelryType() {
+    return JEWELRY_TYPES[Math.floor(Math.random() * JEWELRY_TYPES.length)];
+  }
 
-    var field = els.sparkField;
+  function spawnJewel() {
+    if (jewelryCaught >= JEWELRY_GOAL) return;
+    if (activeJewels >= 5) return;
+
+    var piece = pickJewelryType();
+    var field = els.jewelField;
     var rect = field.getBoundingClientRect();
-    var pad = 36;
+    var pad = 40;
     var x = pad + Math.random() * Math.max(8, rect.width - pad * 2);
     var y = pad + Math.random() * Math.max(8, rect.height - pad * 2);
 
     var sp = document.createElement("button");
     sp.type = "button";
-    sp.className = "spark";
+    sp.className = "jewel-item " + piece.cls;
     sp.style.left = x + "px";
     sp.style.top = y + "px";
-    sp.setAttribute("aria-label", "Поймать блик");
+    sp.setAttribute("aria-label", "Собрать: " + piece.label);
+    sp.innerHTML = piece.svg;
 
     var dead = false;
-    function removeSpark() {
+    function removeJewel() {
       if (dead) return;
       dead = true;
-      activeSparks = Math.max(0, activeSparks - 1);
+      activeJewels = Math.max(0, activeJewels - 1);
       if (sp.parentNode) sp.parentNode.removeChild(sp);
     }
 
     var life = setTimeout(function () {
-      sp.classList.add("spark--fade");
-      setTimeout(removeSpark, 380);
-    }, SPARK_LIFETIME_MS);
+      sp.classList.add("jewel-item--fade");
+      setTimeout(removeJewel, 380);
+    }, JEWEL_LIFETIME_MS);
 
     sp.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
       clearTimeout(life);
-      sparksCaught += 1;
-      els.sparkProgress.textContent = "Поймано: " + sparksCaught + " / " + SPARKS_GOAL;
-      sp.classList.add("spark--fade");
-      setTimeout(removeSpark, 200);
-      if (sparksCaught >= SPARKS_GOAL) {
+      jewelryCaught += 1;
+      els.jewelProgress.textContent = "Собрано: " + jewelryCaught + " / " + JEWELRY_GOAL;
+      sp.classList.add("jewel-item--fade");
+      setTimeout(removeJewel, 200);
+      if (jewelryCaught >= JEWELRY_GOAL) {
         if (spawnTimer) {
           clearInterval(spawnTimer);
           spawnTimer = null;
@@ -144,7 +200,7 @@
     });
 
     field.appendChild(sp);
-    activeSparks += 1;
+    activeJewels += 1;
   }
 
   function applyShineToResult() {
@@ -197,10 +253,10 @@
 
       var logo = new Image();
       logo.onload = function () {
-        var lw = 220;
+        var lw = 340;
         var lh = (logo.height / logo.width) * lw;
         var lx = (w - lw) / 2;
-        var ly = h * 0.22;
+        var ly = h * 0.2;
         ctx.save();
         if (shine === "warm") {
           ctx.shadowColor = "rgba(212, 165, 80, 0.55)";
@@ -215,25 +271,17 @@
         ctx.drawImage(logo, lx, ly, lw, lh);
         ctx.restore();
 
-        ctx.fillStyle = "#111";
+        ctx.fillStyle = "#5c5c5c";
         ctx.textAlign = "center";
-        if (ctx.letterSpacing !== undefined) ctx.letterSpacing = "0.2em";
-        ctx.font = '500 36px system-ui, -apple-system, "Segoe UI", sans-serif';
-        ctx.fillText("NEWGOLD", w / 2, ly + lh + 56);
-        if (ctx.letterSpacing !== undefined) ctx.letterSpacing = "0.12em";
-        ctx.font = '600 14px system-ui, -apple-system, "Segoe UI", sans-serif';
-        ctx.fillStyle = "#5c5c5c";
-        ctx.fillText("ЮВЕЛИРНЫЙ ЗАВОД", w / 2, ly + lh + 86);
         if (ctx.letterSpacing !== undefined) ctx.letterSpacing = "0";
-        ctx.font = '400 20px system-ui, -apple-system, "Segoe UI", sans-serif';
-        ctx.fillStyle = "#5c5c5c";
-        ctx.fillText("Сияние NEWGOLD", w / 2, ly + lh + 130);
+        ctx.font = '400 22px system-ui, -apple-system, "Segoe UI", sans-serif';
+        ctx.fillText("Сияние NEWGOLD", w / 2, ly + lh + 44);
         resolve();
       };
       logo.onerror = function () {
         reject(new Error("logo"));
       };
-      logo.src = NEWGOLD_LOGO_DATA_URI;
+      logo.src = FULL_LOGO_SRC;
     });
   }
 
@@ -293,7 +341,7 @@
   }
 
   document.getElementById("btn-start").addEventListener("click", function () {
-    activeSparks = 0;
+    activeJewels = 0;
     resetStep1();
     showScreen("screen-step1");
     startStep1Spawning();
@@ -332,7 +380,7 @@
     if (warm) selectShineCard(warm);
     els.assembleRange.value = "0";
     initAssembleViewport();
-    activeSparks = 0;
+    activeJewels = 0;
     resetStep1();
     showScreen("screen-start");
   });
