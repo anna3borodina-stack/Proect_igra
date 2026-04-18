@@ -2,11 +2,11 @@
   "use strict";
 
   /* Тот же файл, что у <img class="result-card__logo"> на экране «Готово» */
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=12";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=13";
 
-  var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
   var JEWEL_LIFETIME_MS = 2200;
+  var LIVES_MAX = 3;
 
   function jewelFace(emoji) {
     return (
@@ -25,8 +25,14 @@
     { label: "Диадема", cls: "jewel-item--watch", html: jewelFace("\u{1F451}") },
   ];
 
+  var QUEST_NEED = {};
+  JEWELRY_TYPES.forEach(function (t) {
+    QUEST_NEED[t.cls] = 1;
+  });
+
+  var caughtByCls = {};
+  var lives = LIVES_MAX;
   var shine = "warm";
-  var jewelryCaught = 0;
   var spawnTimer = null;
 
   var els = {
@@ -36,10 +42,12 @@
       step2: document.getElementById("screen-step2"),
       step3: document.getElementById("screen-step3"),
       end: document.getElementById("screen-end"),
+      gameover: document.getElementById("screen-gameover"),
       error: document.getElementById("screen-error"),
     },
     jewelField: document.getElementById("jewel-field"),
     jewelProgress: document.getElementById("jewel-progress"),
+    jewelLives: document.getElementById("jewel-lives"),
     btnStep1Next: document.getElementById("btn-step1-next"),
     assembleRange: document.getElementById("assemble-range"),
     assembleViewport: document.getElementById("assemble-viewport"),
@@ -56,6 +64,53 @@
   };
 
   var assembleMark = null;
+
+  function resetQuestState() {
+    caughtByCls = {};
+    JEWELRY_TYPES.forEach(function (t) {
+      caughtByCls[t.cls] = 0;
+    });
+    lives = LIVES_MAX;
+  }
+
+  function questTotal() {
+    var s = 0;
+    JEWELRY_TYPES.forEach(function (t) {
+      s += QUEST_NEED[t.cls];
+    });
+    return s;
+  }
+
+  function questProgressCount() {
+    var n = 0;
+    JEWELRY_TYPES.forEach(function (t) {
+      n += Math.min(caughtByCls[t.cls], QUEST_NEED[t.cls]);
+    });
+    return n;
+  }
+
+  function isQuestComplete() {
+    return questProgressCount() >= questTotal();
+  }
+
+  function updateProgressUI() {
+    els.jewelProgress.textContent =
+      "Собрано: " + questProgressCount() + " / " + questTotal() + " (по одному каждого вида)";
+    if (els.jewelLives) {
+      els.jewelLives.textContent =
+        "Жизни: " + "\u2665".repeat(lives) + "\u2661".repeat(LIVES_MAX - lives);
+    }
+  }
+
+  function endStep1GameOver() {
+    if (spawnTimer) {
+      clearInterval(spawnTimer);
+      spawnTimer = null;
+    }
+    els.jewelField.innerHTML = "";
+    activeJewels = 0;
+    showScreen("screen-gameover");
+  }
 
   function showScreen(screenId) {
     Object.keys(els.screens).forEach(function (key) {
@@ -91,9 +146,9 @@
   }
 
   function resetStep1() {
-    jewelryCaught = 0;
+    resetQuestState();
     els.jewelField.innerHTML = "";
-    els.jewelProgress.textContent = "Собрано: 0 / " + JEWELRY_GOAL;
+    updateProgressUI();
     els.btnStep1Next.hidden = true;
     if (spawnTimer) clearInterval(spawnTimer);
     spawnTimer = null;
@@ -102,7 +157,7 @@
   function startStep1Spawning() {
     if (spawnTimer) clearInterval(spawnTimer);
     spawnTimer = setInterval(function () {
-      if (jewelryCaught >= JEWELRY_GOAL) {
+      if (isQuestComplete() || lives <= 0) {
         clearInterval(spawnTimer);
         spawnTimer = null;
         return;
@@ -115,11 +170,17 @@
   var activeJewels = 0;
 
   function pickJewelryType() {
-    return JEWELRY_TYPES[Math.floor(Math.random() * JEWELRY_TYPES.length)];
+    var needed = JEWELRY_TYPES.filter(function (t) {
+      return caughtByCls[t.cls] < QUEST_NEED[t.cls];
+    });
+    if (needed.length === 0) {
+      return JEWELRY_TYPES[0];
+    }
+    return needed[Math.floor(Math.random() * needed.length)];
   }
 
   function spawnJewel() {
-    if (jewelryCaught >= JEWELRY_GOAL) return;
+    if (isQuestComplete() || lives <= 0) return;
     if (activeJewels >= 5) return;
 
     var piece = pickJewelryType();
@@ -146,6 +207,17 @@
     }
 
     var life = setTimeout(function () {
+      if (dead) return;
+      lives -= 1;
+      updateProgressUI();
+      if (lives <= 0) {
+        sp.classList.add("jewel-item--fade");
+        setTimeout(function () {
+          removeJewel();
+          endStep1GameOver();
+        }, 380);
+        return;
+      }
       sp.classList.add("jewel-item--fade");
       setTimeout(removeJewel, 380);
     }, JEWEL_LIFETIME_MS);
@@ -154,11 +226,15 @@
       e.preventDefault();
       e.stopPropagation();
       clearTimeout(life);
-      jewelryCaught += 1;
-      els.jewelProgress.textContent = "Собрано: " + jewelryCaught + " / " + JEWELRY_GOAL;
+      var need = QUEST_NEED[piece.cls];
+      var cur = caughtByCls[piece.cls];
+      if (cur < need) {
+        caughtByCls[piece.cls] = cur + 1;
+      }
+      updateProgressUI();
       sp.classList.add("jewel-item--fade");
       setTimeout(removeJewel, 200);
-      if (jewelryCaught >= JEWELRY_GOAL) {
+      if (isQuestComplete()) {
         if (spawnTimer) {
           clearInterval(spawnTimer);
           spawnTimer = null;
@@ -375,6 +451,16 @@
       alert("Замените ссылку в коде на страницу записи в шоурум на сайте NEWGOLD.");
     }
   });
+
+  var btnRetryStep1 = document.getElementById("btn-retry-step1");
+  if (btnRetryStep1) {
+    btnRetryStep1.addEventListener("click", function () {
+      activeJewels = 0;
+      resetStep1();
+      showScreen("screen-step1");
+      startStep1Spawning();
+    });
+  }
 
   initAssembleViewport();
   showScreen("screen-start");
