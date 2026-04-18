@@ -1,8 +1,8 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=19";
-  var ASSET_VER = "19";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=20";
+  var ASSET_VER = "20";
   var JEWEL_IMG_RING = "assets/jewel-ring-rose-heart.png";
   var JEWEL_IMG_NECKLACE = "assets/jewel-necklace-ruby.png";
   /* Шесть подвесок с баннера, нарезаны по отдельности: jewel-strip-6.png → jewel-pendant-1…6 */
@@ -15,9 +15,36 @@
 
   var TOTAL_STEPS = 10;
 
-  var SPAWN_MS = 1300;
-  var JEWEL_LIFETIME_MS = 3000;
-  var LIVES_MAX = 3;
+  /** Уровни коллекции (шаг 1): на каждом — снова по одному каждого вида, сложность растёт */
+  var JEWEL_LEVEL_MAX = 3;
+  var jewelLevel = 1;
+
+  function getJewelLevelConfig(lv) {
+    var table = [
+      null,
+      { spawn: 1300, life: 3000, lives: 3, maxOnField: 5 },
+      { spawn: 1050, life: 2600, lives: 3, maxOnField: 5 },
+      { spawn: 880, life: 2100, lives: 4, maxOnField: 6 },
+    ];
+    return table[lv] || table[1];
+  }
+
+  function getSpawnMs() {
+    return getJewelLevelConfig(jewelLevel).spawn;
+  }
+
+  function getLifetimeMs() {
+    return getJewelLevelConfig(jewelLevel).life;
+  }
+
+  function getLivesMax() {
+    return getJewelLevelConfig(jewelLevel).lives;
+  }
+
+  function getMaxOnField() {
+    return getJewelLevelConfig(jewelLevel).maxOnField;
+  }
+
   var SPARK_TARGET = 10;
 
   function jewelContent(piece) {
@@ -50,7 +77,7 @@
   });
 
   var caughtByCls = {};
-  var lives = LIVES_MAX;
+  var lives = 3;
   var firstMissFree = true;
   var step1FeedbackTimer = null;
   var shine = "warm";
@@ -76,6 +103,7 @@
     },
     jewelField: document.getElementById("jewel-field"),
     jewelProgress: document.getElementById("jewel-progress"),
+    jewelLevel: document.getElementById("jewel-level"),
     jewelLives: document.getElementById("jewel-lives"),
     step1Feedback: document.getElementById("step1-feedback"),
     questBridge: document.getElementById("quest-bridge"),
@@ -115,7 +143,7 @@
     JEWELRY_TYPES.forEach(function (t) {
       caughtByCls[t.cls] = 0;
     });
-    lives = LIVES_MAX;
+    lives = getLivesMax();
     firstMissFree = true;
   }
 
@@ -167,9 +195,13 @@
   function updateProgressUI() {
     els.jewelProgress.textContent =
       "Собрано: " + questProgressCount() + " / " + questTotal() + " · по одному каждого вида";
+    if (els.jewelLevel) {
+      els.jewelLevel.textContent = "Уровень " + jewelLevel + " из " + JEWEL_LEVEL_MAX;
+    }
     if (els.jewelLives) {
+      var maxL = getLivesMax();
       els.jewelLives.textContent =
-        "Жизни: " + "\u2665".repeat(lives) + "\u2661".repeat(LIVES_MAX - lives);
+        "Жизни: " + "\u2665".repeat(lives) + "\u2661".repeat(Math.max(0, maxL - lives));
     }
   }
 
@@ -296,6 +328,7 @@
   }
 
   function resetStep1() {
+    jewelLevel = 1;
     resetQuestState();
     clearStep1Feedback();
     if (els.questBridge) els.questBridge.hidden = true;
@@ -308,15 +341,16 @@
 
   function startStep1Spawning() {
     if (spawnTimer) clearInterval(spawnTimer);
-    spawnTimer = setInterval(function () {
+    var tick = function () {
       if (isQuestComplete() || lives <= 0) {
         clearInterval(spawnTimer);
         spawnTimer = null;
         return;
       }
       spawnJewel();
-    }, SPAWN_MS);
-    spawnJewel();
+    };
+    spawnTimer = setInterval(tick, getSpawnMs());
+    tick();
   }
 
   var activeJewels = 0;
@@ -333,7 +367,7 @@
 
   function spawnJewel() {
     if (isQuestComplete() || lives <= 0) return;
-    if (activeJewels >= 5) return;
+    if (activeJewels >= getMaxOnField()) return;
 
     var piece = pickJewelryType();
     var field = els.jewelField;
@@ -382,7 +416,7 @@
       }
       sp.classList.add("jewel-item--fade");
       setTimeout(removeJewel, 380);
-    }, JEWEL_LIFETIME_MS);
+    }, getLifetimeMs());
 
     sp.addEventListener("click", function (e) {
       e.preventDefault();
@@ -401,8 +435,28 @@
           clearInterval(spawnTimer);
           spawnTimer = null;
         }
-        if (els.questBridge) els.questBridge.hidden = false;
-        els.btnStep1Next.hidden = false;
+        if (jewelLevel < JEWEL_LEVEL_MAX) {
+          var doneLv = jewelLevel;
+          jewelLevel += 1;
+          showStep1Feedback(
+            "Уровень " +
+              doneLv +
+              " пройден! Уровень " +
+              jewelLevel +
+              " — быстрее появление и меньше времени на клик."
+          );
+          setTimeout(function () {
+            clearStep1Feedback();
+            resetQuestState();
+            els.jewelField.innerHTML = "";
+            activeJewels = 0;
+            updateProgressUI();
+            startStep1Spawning();
+          }, 2600);
+        } else {
+          if (els.questBridge) els.questBridge.hidden = false;
+          els.btnStep1Next.hidden = false;
+        }
       }
     });
 
