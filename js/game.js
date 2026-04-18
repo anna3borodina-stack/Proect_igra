@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png";
+  /* Тот же файл, что у <img class="logo-plaque__img"> в шапке и на экране «Готово» */
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=7";
 
   var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
