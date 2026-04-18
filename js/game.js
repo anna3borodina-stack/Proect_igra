@@ -1,16 +1,17 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=23";
-  var ASSET_VER = "23";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=24";
+  var ASSET_VER = "24";
 
-  /** Редкий спавн с золотой рамкой — +50% к баллам за этот клик */
-  var GOLDEN_SPAWN_CHANCE = 0.12;
+  /** Золотая рамка: чуть чаще, чем раньше; множитель к баллам за этот клик */
+  var GOLDEN_SPAWN_CHANCE = 0.15;
+  var GOLDEN_BONUS_MULT = 1.55;
 
   /** Короткие факты о бренде между уровнями коллекции */
   var BRAND_FACTS = [
-    "На заводе NEWGOLD каждое изделие проходит контроль качества на всех этапах.",
-    "Коллекции в пробе 585 и 750 — чтобы украшение подходило под разные сценарии жизни.",
+    "Каждое изделие NEWGOLD проходит многоступенчатый контроль — от сплава до финиша.",
+    "Проба 585 и 750 — разный характер золота под разные истории.",
   ];
 
   /** Баллы за каждый успешный сбор (новый вид в текущем уровне); на поздних уровнях чуть больше */
@@ -23,9 +24,9 @@
 
   function getComboMultiplier() {
     if (comboStreak < 3) return 1;
-    if (comboStreak < 6) return 1.15;
-    if (comboStreak < 9) return 1.25;
-    return 1.35;
+    if (comboStreak < 6) return 1.18;
+    if (comboStreak < 9) return 1.3;
+    return 1.42;
   }
 
   var jewelScore = 0;
@@ -237,15 +238,27 @@
   function updateComboUI() {
     if (!els.jewelCombo) return;
     if (comboStreak === 0) {
-      els.jewelCombo.textContent = "Комбо: ловите подряд без штрафных пропусков";
+      els.jewelCombo.textContent =
+        "Комбо: новые виды подряд — с 3-го удара растёт множитель баллов";
       els.jewelCombo.classList.remove("jewel-combo--hot");
       return;
     }
     var m = getComboMultiplier();
-    var multLabel = m === 1 ? "×1" : "×" + String(Math.round(m * 100) / 100).replace(/\.0$/, "");
+    if (m === 1) {
+      var left = 3 - comboStreak;
+      els.jewelCombo.textContent =
+        "Серия " +
+          comboStreak +
+          " · до бонуса " +
+          left +
+          (left === 1 ? " удар" : " удара");
+      els.jewelCombo.classList.remove("jewel-combo--hot");
+      return;
+    }
+    var multLabel =
+      "×" + String(Math.round(m * 100) / 100).replace(/\.0$/, "");
     els.jewelCombo.textContent = "Серия " + comboStreak + " · " + multLabel;
-    if (comboStreak >= 3) els.jewelCombo.classList.add("jewel-combo--hot");
-    else els.jewelCombo.classList.remove("jewel-combo--hot");
+    els.jewelCombo.classList.add("jewel-combo--hot");
   }
 
   function updateProgressUI() {
@@ -505,7 +518,9 @@
         comboStreak += 1;
         var mult = getComboMultiplier();
         var golden = sp.classList.contains("jewel-item--golden");
-        var pts = Math.round(pointsForCatch() * mult * (golden ? 1.5 : 1));
+        var pts = Math.round(
+          pointsForCatch() * mult * (golden ? GOLDEN_BONUS_MULT : 1)
+        );
         jewelScore += pts;
       } else {
         comboStreak = 0;
