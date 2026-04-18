@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Сияние NEWGOLD — игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=22" />
+  <link rel="stylesheet" href="css/game.css?v=23" />
   <!-- Фон: дублируем критичный градиент здесь, чтобы не терялся при кэше старого game.css -->
   <style>
     html.warm-bg {
@@ -57,7 +57,7 @@
         <h2 id="step1-title" class="subtitle">Соберите украшения</h2>
         <p class="jewel-level" id="jewel-level" aria-live="polite">Уровень 1 из 3</p>
         <p class="hint hint--intro" id="step1-intro">
-          Три уровня коллекции: на каждом нужно поймать по одному украшению каждого вида. С каждым уровнем — быстрее появление и меньше времени на клик. Первый пропуск не отнимает жизнь; дальше за каждое исчезновение до клика — минус жизнь.
+          Три уровня коллекции: на каждом — по одному каждого вида. Подряд без штрафных пропусков растёт комбо и множитель баллов. Редкие золотые рамки дают бонус к очкам. Первый пропуск не отнимает жизнь.
         </p>
         <p class="brand-nudge">NEWGOLD — ювелирный завод: золото и внимание к деталям, как в настоящей мастерской.</p>
         <div id="jewel-field" class="jewel-field" role="application" aria-label="Поле с украшениями"></div>
@@ -65,6 +65,7 @@
           <span class="jewel-score-panel__label">Баллы</span>
           <span class="jewel-score-panel__value" id="jewel-score" aria-live="polite">0</span>
         </div>
+        <p class="jewel-combo" id="jewel-combo" aria-live="polite">Комбо: —</p>
         <p class="progress" id="jewel-progress" aria-live="polite">Собрано: 0 / 8</p>
         <p class="lives" id="jewel-lives" aria-live="polite">Жизни: ♥♥♥</p>
         <p class="step1-feedback" id="step1-feedback" role="status" aria-live="polite" hidden></p>
@@ -199,7 +200,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=22"
+              src="assets/logo-newgold-brand.png?v=23"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -244,6 +245,6 @@
   </div>
 
 
-  <script src="js/game.js?v=22" defer></script>
+  <script src="js/game.js?v=23" defer></script>
 </body>
 </html>

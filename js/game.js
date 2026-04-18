@@ -1,12 +1,31 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=22";
-  var ASSET_VER = "22";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=23";
+  var ASSET_VER = "23";
+
+  /** Редкий спавн с золотой рамкой — +50% к баллам за этот клик */
+  var GOLDEN_SPAWN_CHANCE = 0.12;
+
+  /** Короткие факты о бренде между уровнями коллекции */
+  var BRAND_FACTS = [
+    "На заводе NEWGOLD каждое изделие проходит контроль качества на всех этапах.",
+    "Коллекции в пробе 585 и 750 — чтобы украшение подходило под разные сценарии жизни.",
+  ];
 
   /** Баллы за каждый успешный сбор (новый вид в текущем уровне); на поздних уровнях чуть больше */
   function pointsForCatch() {
     return 80 + jewelLevel * 40;
+  }
+
+  /** Серия успешных ловель подряд (сбрасывается при штрафном пропуске или лишнем клике) */
+  var comboStreak = 0;
+
+  function getComboMultiplier() {
+    if (comboStreak < 3) return 1;
+    if (comboStreak < 6) return 1.15;
+    if (comboStreak < 9) return 1.25;
+    return 1.35;
   }
 
   var jewelScore = 0;
@@ -119,6 +138,7 @@
     jewelProgress: document.getElementById("jewel-progress"),
     jewelLevel: document.getElementById("jewel-level"),
     jewelScore: document.getElementById("jewel-score"),
+    jewelCombo: document.getElementById("jewel-combo"),
     jewelLives: document.getElementById("jewel-lives"),
     step1Feedback: document.getElementById("step1-feedback"),
     questBridge: document.getElementById("quest-bridge"),
@@ -160,6 +180,7 @@
     });
     lives = getLivesMax();
     firstMissFree = true;
+    comboStreak = 0;
   }
 
   function clearStep1Feedback() {
@@ -213,6 +234,20 @@
     }
   }
 
+  function updateComboUI() {
+    if (!els.jewelCombo) return;
+    if (comboStreak === 0) {
+      els.jewelCombo.textContent = "Комбо: ловите подряд без штрафных пропусков";
+      els.jewelCombo.classList.remove("jewel-combo--hot");
+      return;
+    }
+    var m = getComboMultiplier();
+    var multLabel = m === 1 ? "×1" : "×" + String(Math.round(m * 100) / 100).replace(/\.0$/, "");
+    els.jewelCombo.textContent = "Серия " + comboStreak + " · " + multLabel;
+    if (comboStreak >= 3) els.jewelCombo.classList.add("jewel-combo--hot");
+    else els.jewelCombo.classList.remove("jewel-combo--hot");
+  }
+
   function updateProgressUI() {
     if (!els.jewelProgress) return;
     els.jewelProgress.textContent =
@@ -226,6 +261,7 @@
         "Жизни: " + "\u2665".repeat(lives) + "\u2661".repeat(Math.max(0, maxL - lives));
     }
     updateJewelScoreUI();
+    updateComboUI();
   }
 
   function endStep1GameOver() {
@@ -354,6 +390,7 @@
   function resetStep1() {
     jewelLevel = 1;
     jewelScore = 0;
+    comboStreak = 0;
     resetQuestState();
     clearStep1Feedback();
     if (els.questBridge) els.questBridge.hidden = true;
@@ -405,11 +442,18 @@
 
     var sp = document.createElement("button");
     sp.type = "button";
+    var isGolden = Math.random() < GOLDEN_SPAWN_CHANCE;
     sp.className =
-      "jewel-item " + piece.cls + (piece.img ? " jewel-item--photo" : "");
+      "jewel-item " +
+      piece.cls +
+      (piece.img ? " jewel-item--photo" : "") +
+      (isGolden ? " jewel-item--golden" : "");
     sp.style.left = x + "px";
     sp.style.top = y + "px";
-    sp.setAttribute("aria-label", "Собрать: " + piece.label);
+    sp.setAttribute(
+      "aria-label",
+      (isGolden ? "Золотой бонус. " : "") + "Собрать: " + piece.label
+    );
     sp.innerHTML = jewelContent(piece);
 
     var dead = false;
@@ -432,8 +476,10 @@
         );
         sp.classList.add("jewel-item--fade");
         setTimeout(removeJewel, 380);
+        updateProgressUI();
         return;
       }
+      comboStreak = 0;
       lives -= 1;
       updateProgressUI();
       if (lives <= 0) {
@@ -456,7 +502,13 @@
       var cur = caughtByCls[piece.cls];
       if (cur < need) {
         caughtByCls[piece.cls] = cur + 1;
-        jewelScore += pointsForCatch();
+        comboStreak += 1;
+        var mult = getComboMultiplier();
+        var golden = sp.classList.contains("jewel-item--golden");
+        var pts = Math.round(pointsForCatch() * mult * (golden ? 1.5 : 1));
+        jewelScore += pts;
+      } else {
+        comboStreak = 0;
       }
       updateProgressUI();
       if (isQuestComplete()) {
@@ -470,12 +522,17 @@
         if (jewelLevel < JEWEL_LEVEL_MAX) {
           var doneLv = jewelLevel;
           jewelLevel += 1;
+          var factLine =
+            BRAND_FACTS[doneLv - 1] !== undefined
+              ? "\n\n" + BRAND_FACTS[doneLv - 1]
+              : "";
           showStep1Feedback(
             "Уровень " +
               doneLv +
               " пройден! Уровень " +
               jewelLevel +
-              " — быстрее появление и меньше времени на клик."
+              " — быстрее появление и меньше времени на клик." +
+              factLine
           );
           setTimeout(function () {
             clearStep1Feedback();
