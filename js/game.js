@@ -2,7 +2,7 @@
   "use strict";
 
   /* Тот же файл, что у <img class="result-card__logo"> на экране «Готово» */
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=9";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=10";
 
   var JEWELRY_GOAL = 8;
   var SPAWN_MS = 900;
@@ -107,6 +107,7 @@
     assembleMark = document.createElement("div");
     assembleMark.className = "assemble__mark";
     assembleMark.setAttribute("aria-hidden", "true");
+    assembleMark.textContent = "\u{1F60A}";
     els.assembleViewport.appendChild(assembleMark);
     updateAssemble(Number(els.assembleRange.value));
   }

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Сияние NEWGOLD — короткая игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=9" />
+  <link rel="stylesheet" href="css/game.css?v=10" />
 </head>
 <body>
   <div id="app" class="app">
@@ -35,8 +35,8 @@
     <section id="screen-step2" class="screen" aria-labelledby="step2-title" hidden>
       <div class="panel">
         <p class="step-label">Шаг 2 из 3. Форма</p>
-        <h2 id="step2-title" class="subtitle">Соберите символ NEWGOLD</h2>
-        <p class="hint">Двигайте ползунок, пока символ не сложится целиком.</p>
+        <h2 id="step2-title" class="subtitle">Соберите улыбку</h2>
+        <p class="hint">Двигайте ползунок, пока смайлик не станет чётким.</p>
         <div class="assemble">
           <div class="assemble__viewport" id="assemble-viewport" aria-hidden="true"></div>
           <label class="assemble__label" for="assemble-range">Сборка символа</label>
@@ -49,18 +49,18 @@
     <section id="screen-step3" class="screen" aria-labelledby="step3-title" hidden>
       <div class="panel">
         <p class="step-label">Шаг 3 из 3. Сияние</p>
-        <h2 id="step3-title" class="subtitle">Выберите, как сияет символ NEWGOLD</h2>
+        <h2 id="step3-title" class="subtitle">Выберите настроение сияния</h2>
         <div class="shine-options" role="radiogroup" aria-label="Вариант сияния">
           <button type="button" class="shine-card shine-card--selected" data-shine="warm" aria-checked="true" role="radio">
-            <span class="shine-card__preview shine-card__preview--warm"></span>
+            <span class="shine-card__preview shine-card__preview--warm" aria-hidden="true">😊</span>
             <span class="shine-card__name">Тёплое золото</span>
           </button>
           <button type="button" class="shine-card" data-shine="cool" aria-checked="false" role="radio">
-            <span class="shine-card__preview shine-card__preview--cool"></span>
+            <span class="shine-card__preview shine-card__preview--cool" aria-hidden="true">🙂</span>
             <span class="shine-card__name">Холодный блик</span>
           </button>
           <button type="button" class="shine-card" data-shine="teal" aria-checked="false" role="radio">
-            <span class="shine-card__preview shine-card__preview--teal"></span>
+            <span class="shine-card__preview shine-card__preview--teal" aria-hidden="true">😄</span>
             <span class="shine-card__name">Бирюзовый отблеск</span>
           </button>
         </div>
@@ -76,7 +76,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=9"
+              src="assets/logo-newgold-brand.png?v=10"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -113,6 +113,6 @@
   </div>
 
 
-  <script src="js/game.js?v=9" defer></script>
+  <script src="js/game.js?v=10" defer></script>
 </body>
 </html>
