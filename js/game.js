@@ -1,8 +1,8 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=21";
-  var ASSET_VER = "21";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=22";
+  var ASSET_VER = "22";
 
   /** Баллы за каждый успешный сбор (новый вид в текущем уровне); на поздних уровнях чуть больше */
   function pointsForCatch() {
@@ -64,7 +64,7 @@
         '" alt="" loading="lazy" draggable="false" />'
       );
     }
-    return piece.html;
+    return piece.html || "";
   }
 
   var JEWELRY_TYPES = [
@@ -82,6 +82,13 @@
   JEWELRY_TYPES.forEach(function (t) {
     QUEST_NEED[t.cls] = 1;
   });
+
+  /** Увеличивается при полной очистке поля — старые setTimeout на исчезновение не трогают жизни */
+  var jewelTimersEpoch = 0;
+
+  function bumpJewelEpoch() {
+    jewelTimersEpoch += 1;
+  }
 
   var caughtByCls = {};
   var lives = 3;
@@ -207,6 +214,7 @@
   }
 
   function updateProgressUI() {
+    if (!els.jewelProgress) return;
     els.jewelProgress.textContent =
       "Собрано: " + questProgressCount() + " / " + questTotal() + " · по одному каждого вида";
     if (els.jewelLevel) {
@@ -226,6 +234,7 @@
       clearInterval(spawnTimer);
       spawnTimer = null;
     }
+    bumpJewelEpoch();
     els.jewelField.innerHTML = "";
     activeJewels = 0;
     showScreen("screen-gameover");
@@ -348,6 +357,7 @@
     resetQuestState();
     clearStep1Feedback();
     if (els.questBridge) els.questBridge.hidden = true;
+    bumpJewelEpoch();
     els.jewelField.innerHTML = "";
     updateProgressUI();
     els.btnStep1Next.hidden = true;
@@ -385,6 +395,7 @@
     if (isQuestComplete() || lives <= 0) return;
     if (activeJewels >= getMaxOnField()) return;
 
+    var myEpoch = jewelTimersEpoch;
     var piece = pickJewelryType();
     var field = els.jewelField;
     var rect = field.getBoundingClientRect();
@@ -405,11 +416,14 @@
     function removeJewel() {
       if (dead) return;
       dead = true;
-      activeJewels = Math.max(0, activeJewels - 1);
-      if (sp.parentNode) sp.parentNode.removeChild(sp);
+      if (sp.parentNode) {
+        activeJewels = Math.max(0, activeJewels - 1);
+        sp.parentNode.removeChild(sp);
+      }
     }
 
     var life = setTimeout(function () {
+      if (myEpoch !== jewelTimersEpoch) return;
       if (dead) return;
       if (firstMissFree) {
         firstMissFree = false;
@@ -445,13 +459,14 @@
         jewelScore += pointsForCatch();
       }
       updateProgressUI();
-      sp.classList.add("jewel-item--fade");
-      setTimeout(removeJewel, 200);
       if (isQuestComplete()) {
         if (spawnTimer) {
           clearInterval(spawnTimer);
           spawnTimer = null;
         }
+        bumpJewelEpoch();
+        els.jewelField.innerHTML = "";
+        activeJewels = 0;
         if (jewelLevel < JEWEL_LEVEL_MAX) {
           var doneLv = jewelLevel;
           jewelLevel += 1;
@@ -465,8 +480,6 @@
           setTimeout(function () {
             clearStep1Feedback();
             resetQuestState();
-            els.jewelField.innerHTML = "";
-            activeJewels = 0;
             updateProgressUI();
             startStep1Spawning();
           }, 2600);
@@ -474,7 +487,10 @@
           if (els.questBridge) els.questBridge.hidden = false;
           els.btnStep1Next.hidden = false;
         }
+        return;
       }
+      sp.classList.add("jewel-item--fade");
+      setTimeout(removeJewel, 200);
     });
 
     field.appendChild(sp);
