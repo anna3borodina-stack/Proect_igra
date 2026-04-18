@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  var NEWGOLD_LOGO_DATA_URI =
+    "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%20fill%3D%22none%22%3E%3Cg%20stroke%3D%22%23111111%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M60%2018c-6.5%200-12.5%203.2-16%208.5a18%2018%200%201%200-17.3%2031.3A18%2018%200%201%200%2060%20102a18%2018%200%201%200%2033.3-44.2A18%2018%200%201%200%2076%2026.5c-3.5-5.3-9.5-8.5-16-8.5z%22%2F%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2244%22%20rx%3D%2216%22%20ry%3D%2222%22%2F%3E%3Cellipse%20cx%3D%2244%22%20cy%3D%2276%22%20rx%3D%2216%22%20ry%3D%2222%22%20transform%3D%22rotate(60%2044%2076)%22%2F%3E%3Cellipse%20cx%3D%2276%22%20cy%3D%2276%22%20rx%3D%2216%22%20ry%3D%2222%22%20transform%3D%22rotate(-60%2076%2076)%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E";
+
   var SPARKS_GOAL = 8;
   var SPAWN_MS = 900;
   var SPARK_LIFETIME_MS = 2200;
@@ -230,7 +233,7 @@
       logo.onerror = function () {
         reject(new Error("logo"));
       };
-      logo.src = "assets/logo-mark.svg";
+      logo.src = NEWGOLD_LOGO_DATA_URI;
     });
   }
 
