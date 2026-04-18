@@ -1,7 +1,10 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=16";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=17";
+  var ASSET_VER = "17";
+  var JEWEL_IMG_RING = "assets/jewel-ring-rose-heart.png";
+  var JEWEL_IMG_NECKLACE = "assets/jewel-necklace-ruby.png";
 
   var TOTAL_STEPS = 10;
 
@@ -16,13 +19,26 @@
     );
   }
 
+  function jewelContent(piece) {
+    if (piece.img) {
+      return (
+        '<img class="jewel-item__photo" src="' +
+        piece.img +
+        "?v=" +
+        ASSET_VER +
+        '" alt="" loading="lazy" draggable="false" />'
+      );
+    }
+    return piece.html;
+  }
+
   var JEWELRY_TYPES = [
-    { label: "Кольцо", cls: "jewel-item--ring", html: jewelFace("\u{1F48D}") },
+    { label: "Кольцо", cls: "jewel-item--ring", img: JEWEL_IMG_RING },
     { label: "Серьги", cls: "jewel-item--earrings", html: jewelFace("\u{1F48E}") },
     { label: "Браслет", cls: "jewel-item--bracelet", html: jewelFace("\u{1F517}") },
-    { label: "Колье", cls: "jewel-item--necklace", html: jewelFace("\u{1F4FF}") },
+    { label: "Колье", cls: "jewel-item--necklace", img: JEWEL_IMG_NECKLACE },
     { label: "Брошь", cls: "jewel-item--brooch", html: jewelFace("\u{1F4A0}") },
-    { label: "Подвеска", cls: "jewel-item--pendant", html: jewelFace("\u{1F9FF}") },
+    { label: "Подвеска", cls: "jewel-item--pendant", img: JEWEL_IMG_NECKLACE },
     { label: "Цепь", cls: "jewel-item--chain", html: jewelFace("\u{26D3}\u{FE0F}") },
     { label: "Диадема", cls: "jewel-item--watch", html: jewelFace("\u{1F451}") },
   ];
@@ -327,11 +343,12 @@
 
     var sp = document.createElement("button");
     sp.type = "button";
-    sp.className = "jewel-item " + piece.cls;
+    sp.className =
+      "jewel-item " + piece.cls + (piece.img ? " jewel-item--photo" : "");
     sp.style.left = x + "px";
     sp.style.top = y + "px";
     sp.setAttribute("aria-label", "Собрать: " + piece.label);
-    sp.innerHTML = piece.html;
+    sp.innerHTML = jewelContent(piece);
 
     var dead = false;
     function removeJewel() {
