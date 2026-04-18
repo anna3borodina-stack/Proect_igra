@@ -1,8 +1,10 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=24";
-  var ASSET_VER = "24";
+  var GAME_BUILD = "25";
+
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=25";
+  var ASSET_VER = "25";
 
   /** Золотая рамка: чуть чаще, чем раньше; множитель к баллам за этот клик */
   var GOLDEN_SPAWN_CHANCE = 0.15;
@@ -850,4 +852,12 @@
   initPolishViewport();
   updateSparkUI();
   showScreen("screen-start");
+
+  (function syncBuildStamp() {
+    var el = document.getElementById("game-build-label");
+    if (el) el.textContent = "Сборка " + GAME_BUILD;
+  })();
+  if (typeof console !== "undefined" && console.info) {
+    console.info("[NEWGOLD] Сияние — сборка " + GAME_BUILD);
+  }
 })();

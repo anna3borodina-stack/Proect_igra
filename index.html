@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <!-- Сияние NEWGOLD · сборка: украшения-SVG + тёплый фон (обновите GitHub Pages после push) -->
-<html lang="ru" class="warm-bg">
+<html lang="ru" class="warm-bg" data-game-build="25">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <!-- Снижает риск устаревшего HTML/CSS при обновлении на хостинге -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
   <meta name="description" content="Сияние NEWGOLD — игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=24" />
+  <link rel="stylesheet" href="css/game.css?v=25" />
   <!-- Фон: дублируем критичный градиент здесь, чтобы не терялся при кэше старого game.css -->
   <style>
     html.warm-bg {
@@ -47,7 +50,7 @@
         <h1 id="start-title" class="title">Сияние NEWGOLD</h1>
         <p class="lead">Интерактивное путешествие по символу бренда. Рассчитывайте примерно на 8–15 минут.</p>
         <button type="button" class="btn btn--primary" id="btn-start">Начать</button>
-        <p class="fineprint">Игра бесплатная, регистрация не нужна. 10 шагов до финала.</p>
+        <p class="fineprint">Игра бесплатная, регистрация не нужна. 10 шагов до финала. <span id="game-build-label">Сборка 25</span></p>
       </div>
     </section>
 
@@ -200,7 +203,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=24"
+              src="assets/logo-newgold-brand.png?v=25"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -245,6 +248,6 @@
   </div>
 
 
-  <script src="js/game.js?v=24" defer></script>
+  <script src="js/game.js?v=25" defer></script>
 </body>
 </html>
