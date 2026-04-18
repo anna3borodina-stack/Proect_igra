@@ -149,7 +149,31 @@ body::before {
 }
 
 .hint--intro {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.brand-nudge {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.step1-feedback {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--teal-deep);
+  text-align: center;
+}
+
+.quest-bridge {
+  margin: 0 0 0.85rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
 }
 
 .fineprint {

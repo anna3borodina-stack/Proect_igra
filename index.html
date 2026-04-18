@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Сияние NEWGOLD — короткая игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=13" />
+  <link rel="stylesheet" href="css/game.css?v=14" />
 </head>
 <body>
   <div id="app" class="app">
@@ -24,11 +24,16 @@
         <p class="step-label">Шаг 1 из 3. Коллекция</p>
         <h2 id="step1-title" class="subtitle">Соберите украшения</h2>
         <p class="hint hint--intro" id="step1-intro">
-          Поймайте по одному украшению каждого вида. Если изделие исчезло до клика — теряется жизнь. Три жизни на попытку.
+          Поймайте по одному украшению каждого вида. Первый пропуск не отнимает жизнь; дальше за каждое исчезновение до клика — минус жизнь. Три жизни на попытку.
         </p>
+        <p class="brand-nudge">NEWGOLD — ювелирный завод: золото и внимание к деталям, как в настоящей мастерской.</p>
         <div id="jewel-field" class="jewel-field" role="application" aria-label="Поле с украшениями"></div>
         <p class="progress" id="jewel-progress" aria-live="polite">Собрано: 0 / 8</p>
         <p class="lives" id="jewel-lives" aria-live="polite">Жизни: ♥♥♥</p>
+        <p class="step1-feedback" id="step1-feedback" role="status" aria-live="polite" hidden></p>
+        <p class="quest-bridge" id="quest-bridge" hidden>
+          Коллекция готова. Дальше — соберите символ NEWGOLD, как в мастерской.
+        </p>
         <button type="button" class="btn btn--ghost" id="btn-step1-next" hidden>Дальше</button>
       </div>
     </section>
@@ -77,7 +82,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=13"
+              src="assets/logo-newgold-brand.png?v=14"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -122,6 +127,6 @@
   </div>
 
 
-  <script src="js/game.js?v=13" defer></script>
+  <script src="js/game.js?v=14" defer></script>
 </body>
 </html>

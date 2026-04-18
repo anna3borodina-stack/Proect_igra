@@ -2,7 +2,7 @@
   "use strict";
 
   /* Тот же файл, что у <img class="result-card__logo"> на экране «Готово» */
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=13";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=14";
 
   var SPAWN_MS = 900;
   var JEWEL_LIFETIME_MS = 2200;
@@ -32,6 +32,8 @@
 
   var caughtByCls = {};
   var lives = LIVES_MAX;
+  var firstMissFree = true;
+  var step1FeedbackTimer = null;
   var shine = "warm";
   var spawnTimer = null;
 
@@ -48,6 +50,8 @@
     jewelField: document.getElementById("jewel-field"),
     jewelProgress: document.getElementById("jewel-progress"),
     jewelLives: document.getElementById("jewel-lives"),
+    step1Feedback: document.getElementById("step1-feedback"),
+    questBridge: document.getElementById("quest-bridge"),
     btnStep1Next: document.getElementById("btn-step1-next"),
     assembleRange: document.getElementById("assemble-range"),
     assembleViewport: document.getElementById("assemble-viewport"),
@@ -71,6 +75,32 @@
       caughtByCls[t.cls] = 0;
     });
     lives = LIVES_MAX;
+    firstMissFree = true;
+  }
+
+  function clearStep1Feedback() {
+    if (step1FeedbackTimer) {
+      clearTimeout(step1FeedbackTimer);
+      step1FeedbackTimer = null;
+    }
+    if (els.step1Feedback) {
+      els.step1Feedback.textContent = "";
+      els.step1Feedback.hidden = true;
+    }
+  }
+
+  function showStep1Feedback(text) {
+    if (!els.step1Feedback) return;
+    clearStep1Feedback();
+    els.step1Feedback.hidden = false;
+    els.step1Feedback.textContent = text;
+    step1FeedbackTimer = setTimeout(function () {
+      step1FeedbackTimer = null;
+      if (els.step1Feedback) {
+        els.step1Feedback.textContent = "";
+        els.step1Feedback.hidden = true;
+      }
+    }, 4500);
   }
 
   function questTotal() {
@@ -95,7 +125,7 @@
 
   function updateProgressUI() {
     els.jewelProgress.textContent =
-      "Собрано: " + questProgressCount() + " / " + questTotal() + " (по одному каждого вида)";
+      "Собрано: " + questProgressCount() + " / " + questTotal() + " · по одному каждого вида";
     if (els.jewelLives) {
       els.jewelLives.textContent =
         "Жизни: " + "\u2665".repeat(lives) + "\u2661".repeat(LIVES_MAX - lives);
@@ -103,6 +133,7 @@
   }
 
   function endStep1GameOver() {
+    clearStep1Feedback();
     if (spawnTimer) {
       clearInterval(spawnTimer);
       spawnTimer = null;
@@ -147,6 +178,8 @@
 
   function resetStep1() {
     resetQuestState();
+    clearStep1Feedback();
+    if (els.questBridge) els.questBridge.hidden = true;
     els.jewelField.innerHTML = "";
     updateProgressUI();
     els.btnStep1Next.hidden = true;
@@ -208,6 +241,15 @@
 
     var life = setTimeout(function () {
       if (dead) return;
+      if (firstMissFree) {
+        firstMissFree = false;
+        showStep1Feedback(
+          "Первый пропуск не штрафуется. Дальше за каждое исчезновение до клика — минус жизнь."
+        );
+        sp.classList.add("jewel-item--fade");
+        setTimeout(removeJewel, 380);
+        return;
+      }
       lives -= 1;
       updateProgressUI();
       if (lives <= 0) {
@@ -239,6 +281,7 @@
           clearInterval(spawnTimer);
           spawnTimer = null;
         }
+        if (els.questBridge) els.questBridge.hidden = false;
         els.btnStep1Next.hidden = false;
       }
     });
