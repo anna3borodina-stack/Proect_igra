@@ -1,8 +1,15 @@
 (function () {
   "use strict";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=20";
-  var ASSET_VER = "20";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=21";
+  var ASSET_VER = "21";
+
+  /** Баллы за каждый успешный сбор (новый вид в текущем уровне); на поздних уровнях чуть больше */
+  function pointsForCatch() {
+    return 80 + jewelLevel * 40;
+  }
+
+  var jewelScore = 0;
   var JEWEL_IMG_RING = "assets/jewel-ring-rose-heart.png";
   var JEWEL_IMG_NECKLACE = "assets/jewel-necklace-ruby.png";
   /* Шесть подвесок с баннера, нарезаны по отдельности: jewel-strip-6.png → jewel-pendant-1…6 */
@@ -104,6 +111,7 @@
     jewelField: document.getElementById("jewel-field"),
     jewelProgress: document.getElementById("jewel-progress"),
     jewelLevel: document.getElementById("jewel-level"),
+    jewelScore: document.getElementById("jewel-score"),
     jewelLives: document.getElementById("jewel-lives"),
     step1Feedback: document.getElementById("step1-feedback"),
     questBridge: document.getElementById("quest-bridge"),
@@ -192,6 +200,12 @@
     return questProgressCount() >= questTotal();
   }
 
+  function updateJewelScoreUI() {
+    if (els.jewelScore) {
+      els.jewelScore.textContent = String(jewelScore);
+    }
+  }
+
   function updateProgressUI() {
     els.jewelProgress.textContent =
       "Собрано: " + questProgressCount() + " / " + questTotal() + " · по одному каждого вида";
@@ -203,6 +217,7 @@
       els.jewelLives.textContent =
         "Жизни: " + "\u2665".repeat(lives) + "\u2661".repeat(Math.max(0, maxL - lives));
     }
+    updateJewelScoreUI();
   }
 
   function endStep1GameOver() {
@@ -329,6 +344,7 @@
 
   function resetStep1() {
     jewelLevel = 1;
+    jewelScore = 0;
     resetQuestState();
     clearStep1Feedback();
     if (els.questBridge) els.questBridge.hidden = true;
@@ -426,6 +442,7 @@
       var cur = caughtByCls[piece.cls];
       if (cur < need) {
         caughtByCls[piece.cls] = cur + 1;
+        jewelScore += pointsForCatch();
       }
       updateProgressUI();
       sp.classList.add("jewel-item--fade");
