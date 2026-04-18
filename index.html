@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="description" content="Сияние NEWGOLD — короткая игра про символ ювелирного бренда NEWGOLD." />
+  <meta name="description" content="Сияние NEWGOLD — игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=14" />
+  <link rel="stylesheet" href="css/game.css?v=15" />
 </head>
 <body>
   <div id="app" class="app">
     <section id="screen-start" class="screen screen--active" aria-labelledby="start-title">
       <div class="panel">
         <h1 id="start-title" class="title">Сияние NEWGOLD</h1>
-        <p class="lead">Короткая игра про символ NEWGOLD. Займёт несколько минут.</p>
+        <p class="lead">Интерактивное путешествие по символу бренда. Рассчитывайте примерно на 8–15 минут.</p>
         <button type="button" class="btn btn--primary" id="btn-start">Начать</button>
-        <p class="fineprint">Игра бесплатная, регистрация не нужна.</p>
+        <p class="fineprint">Игра бесплатная, регистрация не нужна. 10 шагов до финала.</p>
       </div>
     </section>
 
     <section id="screen-step1" class="screen" aria-labelledby="step1-title" hidden>
       <div class="panel panel--narrow">
-        <p class="step-label">Шаг 1 из 3. Коллекция</p>
+        <p class="step-label">Шаг 1 из 10 · Коллекция</p>
         <h2 id="step1-title" class="subtitle">Соберите украшения</h2>
         <p class="hint hint--intro" id="step1-intro">
           Поймайте по одному украшению каждого вида. Первый пропуск не отнимает жизнь; дальше за каждое исчезновение до клика — минус жизнь. Три жизни на попытку.
@@ -32,30 +32,109 @@
         <p class="lives" id="jewel-lives" aria-live="polite">Жизни: ♥♥♥</p>
         <p class="step1-feedback" id="step1-feedback" role="status" aria-live="polite" hidden></p>
         <p class="quest-bridge" id="quest-bridge" hidden>
-          Коллекция готова. Дальше — соберите символ NEWGOLD, как в мастерской.
+          Коллекция готова. Дальше — путь золота и символ NEWGOLD.
         </p>
         <button type="button" class="btn btn--ghost" id="btn-step1-next" hidden>Дальше</button>
       </div>
     </section>
 
-    <section id="screen-step2" class="screen" aria-labelledby="step2-title" hidden>
+    <section id="screen-step2" class="screen" aria-labelledby="s2-title" hidden>
       <div class="panel">
-        <p class="step-label">Шаг 2 из 3. Форма</p>
-        <h2 id="step2-title" class="subtitle">Соберите улыбку</h2>
+        <p class="step-label">Шаг 2 из 10 · Путь золота</p>
+        <h2 id="s2-title" class="subtitle">От слитка к украшению</h2>
+        <p class="hint">
+          На заводе NEWGOLD золото проходит литьё, пайку и полировку под контролем геммологов. Каждое изделие — цепочка решений мастера: проба, форма, финиш.
+        </p>
+        <p class="hint">Вы уже собрали коллекцию форм. Дальше — выберите характер металла и настроение.</p>
+        <button type="button" class="btn btn--primary" id="btn-step2-next">Дальше</button>
+      </div>
+    </section>
+
+    <section id="screen-step3" class="screen" aria-labelledby="s3-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 3 из 10 · Проба</p>
+        <h2 id="s3-title" class="subtitle">Какой оттенок ближе?</h2>
+        <p class="hint">Выберите пробу — так задаётся «температура» вашего символа в игре.</p>
+        <div class="choice-grid" role="group" aria-label="Проба металла">
+          <button type="button" class="choice-chip" data-alloy="585">Золото 585</button>
+          <button type="button" class="choice-chip" data-alloy="750">Золото 750</button>
+          <button type="button" class="choice-chip" data-alloy="combo">Комбинированное</button>
+        </div>
+        <button type="button" class="btn btn--primary" id="btn-step3-next" disabled>Дальше</button>
+      </div>
+    </section>
+
+    <section id="screen-step4" class="screen" aria-labelledby="s4-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 4 из 10 · Акцент</p>
+        <h2 id="s4-title" class="subtitle">Настроение камня</h2>
+        <p class="hint">Что отражает ваше сияние сегодня?</p>
+        <div class="choice-grid choice-grid--icons" role="group" aria-label="Настроение">
+          <button type="button" class="choice-chip choice-chip--icon" data-mood="classic" title="Классика">💎</button>
+          <button type="button" class="choice-chip choice-chip--icon" data-mood="festive" title="Праздник">✨</button>
+          <button type="button" class="choice-chip choice-chip--icon" data-mood="soft" title="Нежность">🤍</button>
+        </div>
+        <button type="button" class="btn btn--primary" id="btn-step4-next" disabled>Дальше</button>
+      </div>
+    </section>
+
+    <section id="screen-step5" class="screen" aria-labelledby="s5-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 5 из 10 · Искра</p>
+        <h2 id="s5-title" class="subtitle">Закалите намерение</h2>
+        <p class="hint">Нажмите на искру 10 раз — как будто подводите кольцо к финальной полировке.</p>
+        <div class="spark-wrap">
+          <button type="button" class="spark-btn" id="spark-btn" aria-label="Искра">✨</button>
+          <p class="spark-count" id="spark-count" aria-live="polite">0 / 10</p>
+        </div>
+        <button type="button" class="btn btn--primary" id="btn-step5-next" disabled>Дальше</button>
+      </div>
+    </section>
+
+    <section id="screen-step6" class="screen" aria-labelledby="step6-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 6 из 10 · Форма</p>
+        <h2 id="step6-title" class="subtitle">Соберите улыбку</h2>
         <p class="hint">Двигайте ползунок, пока смайлик не станет чётким.</p>
         <div class="assemble">
           <div class="assemble__viewport" id="assemble-viewport" aria-hidden="true"></div>
           <label class="assemble__label" for="assemble-range">Сборка символа</label>
           <input type="range" id="assemble-range" class="assemble__range" min="0" max="100" value="0" />
         </div>
-        <button type="button" class="btn btn--primary" id="btn-step2-next" disabled>Дальше</button>
+        <button type="button" class="btn btn--primary" id="btn-step6-next" disabled>Дальше</button>
       </div>
     </section>
 
-    <section id="screen-step3" class="screen" aria-labelledby="step3-title" hidden>
+    <section id="screen-step7" class="screen" aria-labelledby="step7-title" hidden>
       <div class="panel">
-        <p class="step-label">Шаг 3 из 3. Сияние</p>
-        <h2 id="step3-title" class="subtitle">Выберите настроение сияния</h2>
+        <p class="step-label">Шаг 7 из 10 · Полировка</p>
+        <h2 id="step7-title" class="subtitle">Доведите блик до идеала</h2>
+        <p class="hint">Проведите ползунок до конца — от матового отблеска к зеркальному.</p>
+        <div class="assemble polish">
+          <div class="assemble__viewport polish__viewport" id="polish-viewport" aria-hidden="true"></div>
+          <label class="assemble__label" for="polish-range">Глянец</label>
+          <input type="range" id="polish-range" class="assemble__range" min="0" max="100" value="0" />
+        </div>
+        <button type="button" class="btn btn--primary" id="btn-step7-next" disabled>Дальше</button>
+      </div>
+    </section>
+
+    <section id="screen-step8" class="screen" aria-labelledby="s8-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 8 из 10 · Мастерская</p>
+        <h2 id="s8-title" class="subtitle">Контроль качества</h2>
+        <p class="hint">
+          Перед выпуском изделие проходит осмотр: посадка камней, геометрия, полировка. Так же и ваш символ — собран из шагов, которые вы прошли.
+        </p>
+        <p class="hint">Осталось выбрать настроение сияния и сохранить результат.</p>
+        <button type="button" class="btn btn--primary" id="btn-step8-next">Дальше</button>
+      </div>
+    </section>
+
+    <section id="screen-step9" class="screen" aria-labelledby="step9-title" hidden>
+      <div class="panel">
+        <p class="step-label">Шаг 9 из 10 · Сияние</p>
+        <h2 id="step9-title" class="subtitle">Выберите настроение сияния</h2>
         <div class="shine-options" role="radiogroup" aria-label="Вариант сияния">
           <button type="button" class="shine-card shine-card--selected" data-shine="warm" aria-checked="true" role="radio">
             <span class="shine-card__preview shine-card__preview--warm" aria-hidden="true">😊</span>
@@ -70,19 +149,20 @@
             <span class="shine-card__name">Бирюзовый отблеск</span>
           </button>
         </div>
-        <button type="button" class="btn btn--primary" id="btn-step3-done">Готово</button>
+        <button type="button" class="btn btn--primary" id="btn-step9-done">Готово</button>
       </div>
     </section>
 
     <section id="screen-end" class="screen" aria-labelledby="end-title" hidden>
       <div class="panel">
+        <p class="step-label">Шаг 10 из 10 · Итог</p>
         <h2 id="end-title" class="title title--small">Готово</h2>
         <p class="lead">Символ NEWGOLD сияет. Сохраните картинку или поделитесь с близкими.</p>
         <div id="result-card" class="result-card">
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=14"
+              src="assets/logo-newgold-brand.png?v=15"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -127,6 +207,6 @@
   </div>
 
 
-  <script src="js/game.js?v=14" defer></script>
+  <script src="js/game.js?v=15" defer></script>
 </body>
 </html>

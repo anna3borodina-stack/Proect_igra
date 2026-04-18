@@ -1,12 +1,12 @@
 (function () {
   "use strict";
 
-  /* Тот же файл, что у <img class="result-card__logo"> на экране «Готово» */
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=14";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=15";
 
-  var SPAWN_MS = 900;
-  var JEWEL_LIFETIME_MS = 2200;
+  var SPAWN_MS = 1300;
+  var JEWEL_LIFETIME_MS = 3000;
   var LIVES_MAX = 3;
+  var SPARK_TARGET = 10;
 
   function jewelFace(emoji) {
     return (
@@ -36,6 +36,8 @@
   var step1FeedbackTimer = null;
   var shine = "warm";
   var spawnTimer = null;
+  var sparkClicks = 0;
+  var polishMark = null;
 
   var els = {
     screens: {
@@ -43,6 +45,12 @@
       step1: document.getElementById("screen-step1"),
       step2: document.getElementById("screen-step2"),
       step3: document.getElementById("screen-step3"),
+      step4: document.getElementById("screen-step4"),
+      step5: document.getElementById("screen-step5"),
+      step6: document.getElementById("screen-step6"),
+      step7: document.getElementById("screen-step7"),
+      step8: document.getElementById("screen-step8"),
+      step9: document.getElementById("screen-step9"),
       end: document.getElementById("screen-end"),
       gameover: document.getElementById("screen-gameover"),
       error: document.getElementById("screen-error"),
@@ -53,10 +61,20 @@
     step1Feedback: document.getElementById("step1-feedback"),
     questBridge: document.getElementById("quest-bridge"),
     btnStep1Next: document.getElementById("btn-step1-next"),
+    btnStep2Next: document.getElementById("btn-step2-next"),
+    btnStep3Next: document.getElementById("btn-step3-next"),
+    btnStep4Next: document.getElementById("btn-step4-next"),
+    btnStep5Next: document.getElementById("btn-step5-next"),
+    sparkBtn: document.getElementById("spark-btn"),
+    sparkCount: document.getElementById("spark-count"),
     assembleRange: document.getElementById("assemble-range"),
     assembleViewport: document.getElementById("assemble-viewport"),
-    btnStep2Next: document.getElementById("btn-step2-next"),
-    btnStep3Done: document.getElementById("btn-step3-done"),
+    btnStep6Next: document.getElementById("btn-step6-next"),
+    polishRange: document.getElementById("polish-range"),
+    polishViewport: document.getElementById("polish-viewport"),
+    btnStep7Next: document.getElementById("btn-step7-next"),
+    btnStep8Next: document.getElementById("btn-step8-next"),
+    btnStep9Done: document.getElementById("btn-step9-done"),
     resultInner: document.getElementById("result-inner"),
     btnSave: document.getElementById("btn-save"),
     btnShare: document.getElementById("btn-share"),
@@ -173,7 +191,50 @@
     assembleMark.style.filter = "blur(" + blur + "px)";
     assembleMark.style.transform = "scale(" + scale + ")";
     assembleMark.style.opacity = String(opacity);
-    els.btnStep2Next.disabled = value < 100;
+    els.btnStep6Next.disabled = value < 100;
+  }
+
+  function initPolishViewport() {
+    if (!els.polishViewport) return;
+    els.polishViewport.innerHTML = "";
+    polishMark = document.createElement("div");
+    polishMark.className = "assemble__mark polish__mark";
+    polishMark.setAttribute("aria-hidden", "true");
+    polishMark.textContent = "\u{1F48E}";
+    els.polishViewport.appendChild(polishMark);
+    updatePolish(Number(els.polishRange.value));
+  }
+
+  function updatePolish(value) {
+    if (!polishMark) return;
+    var t = value / 100;
+    var blur = (1 - t) * 12;
+    var brightness = 0.82 + t * 0.18;
+    polishMark.style.filter = "blur(" + blur + "px) brightness(" + brightness + ")";
+    polishMark.style.transform = "scale(" + (0.88 + t * 0.12) + ")";
+    els.btnStep7Next.disabled = value < 100;
+  }
+
+  function updateSparkUI() {
+    if (els.sparkCount) els.sparkCount.textContent = sparkClicks + " / " + SPARK_TARGET;
+    if (els.btnStep5Next) els.btnStep5Next.disabled = sparkClicks < SPARK_TARGET;
+  }
+
+  function resetSteps2to9() {
+    sparkClicks = 0;
+    updateSparkUI();
+    document.querySelectorAll(".choice-chip[data-alloy]").forEach(function (c) {
+      c.classList.remove("choice-chip--selected");
+    });
+    document.querySelectorAll(".choice-chip[data-mood]").forEach(function (c) {
+      c.classList.remove("choice-chip--selected");
+    });
+    if (els.btnStep3Next) els.btnStep3Next.disabled = true;
+    if (els.btnStep4Next) els.btnStep4Next.disabled = true;
+    if (els.assembleRange) els.assembleRange.value = "0";
+    if (els.polishRange) els.polishRange.value = "0";
+    initAssembleViewport();
+    initPolishViewport();
   }
 
   function resetStep1() {
@@ -430,28 +491,91 @@
   document.getElementById("btn-start").addEventListener("click", function () {
     activeJewels = 0;
     resetStep1();
+    resetSteps2to9();
+    var warm = document.querySelector('.shine-card[data-shine="warm"]');
+    if (warm) selectShineCard(warm);
     showScreen("screen-step1");
     startStep1Spawning();
   });
 
   els.btnStep1Next.addEventListener("click", function () {
-    els.assembleRange.value = "0";
-    initAssembleViewport();
     showScreen("screen-step2");
-  });
-
-  els.assembleRange.addEventListener("input", function () {
-    updateAssemble(Number(els.assembleRange.value));
   });
 
   els.btnStep2Next.addEventListener("click", function () {
     showScreen("screen-step3");
   });
 
-  els.btnStep3Done.addEventListener("click", function () {
+  els.btnStep3Next.addEventListener("click", function () {
+    showScreen("screen-step4");
+  });
+
+  els.btnStep4Next.addEventListener("click", function () {
+    showScreen("screen-step5");
+  });
+
+  els.btnStep5Next.addEventListener("click", function () {
+    els.assembleRange.value = "0";
+    initAssembleViewport();
+    showScreen("screen-step6");
+  });
+
+  els.btnStep6Next.addEventListener("click", function () {
+    if (els.polishRange) els.polishRange.value = "0";
+    initPolishViewport();
+    showScreen("screen-step7");
+  });
+
+  els.btnStep7Next.addEventListener("click", function () {
+    showScreen("screen-step8");
+  });
+
+  els.btnStep8Next.addEventListener("click", function () {
+    showScreen("screen-step9");
+  });
+
+  els.btnStep9Done.addEventListener("click", function () {
     applyShineToResult();
     showScreen("screen-end");
   });
+
+  document.querySelectorAll(".choice-chip[data-alloy]").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      document.querySelectorAll(".choice-chip[data-alloy]").forEach(function (c) {
+        c.classList.remove("choice-chip--selected");
+      });
+      chip.classList.add("choice-chip--selected");
+      els.btnStep3Next.disabled = false;
+    });
+  });
+
+  document.querySelectorAll(".choice-chip[data-mood]").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      document.querySelectorAll(".choice-chip[data-mood]").forEach(function (c) {
+        c.classList.remove("choice-chip--selected");
+      });
+      chip.classList.add("choice-chip--selected");
+      els.btnStep4Next.disabled = false;
+    });
+  });
+
+  if (els.sparkBtn) {
+    els.sparkBtn.addEventListener("click", function () {
+      if (sparkClicks >= SPARK_TARGET) return;
+      sparkClicks += 1;
+      updateSparkUI();
+    });
+  }
+
+  els.assembleRange.addEventListener("input", function () {
+    updateAssemble(Number(els.assembleRange.value));
+  });
+
+  if (els.polishRange) {
+    els.polishRange.addEventListener("input", function () {
+      updatePolish(Number(els.polishRange.value));
+    });
+  }
 
   document.querySelectorAll(".shine-card").forEach(function (card) {
     card.addEventListener("click", function () {
@@ -465,10 +589,9 @@
   els.btnReplay.addEventListener("click", function () {
     var warm = document.querySelector('.shine-card[data-shine="warm"]');
     if (warm) selectShineCard(warm);
-    els.assembleRange.value = "0";
-    initAssembleViewport();
     activeJewels = 0;
     resetStep1();
+    resetSteps2to9();
     showScreen("screen-start");
   });
 
@@ -506,5 +629,7 @@
   }
 
   initAssembleViewport();
+  initPolishViewport();
+  updateSparkUI();
   showScreen("screen-start");
 })();
