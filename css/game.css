@@ -244,6 +244,56 @@ body::before {
   color: var(--muted);
 }
 
+.start-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.howto-panel {
+  max-width: 100%;
+  max-height: min(78vh, 560px);
+  display: flex;
+  flex-direction: column;
+}
+
+.howto-lead {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+}
+
+.howto-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin-bottom: 0.75rem;
+  padding-right: 0.25rem;
+}
+
+.rules-list {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.rules-list li {
+  margin-bottom: 0.65rem;
+  padding-left: 0.15rem;
+}
+
+.rules-list li:last-child {
+  margin-bottom: 0;
+}
+
+.howto-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--line);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

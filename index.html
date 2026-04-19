@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Сияние NEWGOLD · сборка: украшения-SVG + тёплый фон (обновите GitHub Pages после push) -->
-<html lang="ru" class="warm-bg" data-game-build="25">
+<html lang="ru" class="warm-bg" data-game-build="26">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -9,7 +9,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta name="description" content="Сияние NEWGOLD — игра про символ ювелирного бренда NEWGOLD." />
   <title>Сияние NEWGOLD</title>
-  <link rel="stylesheet" href="css/game.css?v=25" />
+  <link rel="stylesheet" href="css/game.css?v=26" />
   <!-- Фон: дублируем критичный градиент здесь, чтобы не терялся при кэше старого game.css -->
   <style>
     html.warm-bg {
@@ -49,8 +49,37 @@
       <div class="panel">
         <h1 id="start-title" class="title">Сияние NEWGOLD</h1>
         <p class="lead">Интерактивное путешествие по символу бренда. Рассчитывайте примерно на 8–15 минут.</p>
-        <button type="button" class="btn btn--primary" id="btn-start">Начать</button>
-        <p class="fineprint">Игра бесплатная, регистрация не нужна. 10 шагов до финала. <span id="game-build-label">Сборка 25</span></p>
+        <div class="start-actions">
+          <button type="button" class="btn btn--primary" id="btn-open-howto">Как играть</button>
+          <button type="button" class="btn btn--ghost" id="btn-start">Начать сразу</button>
+        </div>
+        <p class="fineprint">Игра бесплатная, регистрация не нужна. Всего 10 шагов до финала. <span id="game-build-label">Сборка 26</span></p>
+      </div>
+    </section>
+
+    <section id="screen-howto" class="screen" aria-labelledby="howto-title" hidden>
+      <div class="panel howto-panel">
+        <p class="step-label">Перед игрой</p>
+        <h2 id="howto-title" class="subtitle">Что делать в коллекции</h2>
+        <p class="hint howto-lead">
+          Ниже — правила первого шага (коллекция украшений). Остальные шаги игры проходятся по кнопке «Дальше» с подсказками на экране.
+        </p>
+        <div class="howto-body">
+          <ol class="rules-list">
+            <li><strong>Цель.</strong> Поймать по одному украшению каждого из восьми видов: кольцо, серьги, браслет, колье, брошь, подвеска, цепь, диадема.</li>
+            <li><strong>Как ловить.</strong> Украшения появляются на поле — нажмите на них до того, как исчезнут по таймеру. Если не успели — это пропуск.</li>
+            <li><strong>Жизни.</strong> За каждый штрафной пропуск (после бесплатного первого) снимается одна жизнь. Когда жизней не осталось — шаг начинается заново.</li>
+            <li><strong>Три уровня коллекции.</strong> На каждом уровне снова нужно собрать все восемь видов. С каждым уровнем украшения появляются чаще, а времени на клик меньше.</li>
+            <li><strong>Баллы.</strong> За каждый новый пойманный вид начисляются очки; на более высоких уровнях коллекции базовый балл выше.</li>
+            <li><strong>Комбо.</strong> Если подряд ловите только новые нужные виды, растёт серия и множитель баллов (с третьего удара подряд).</li>
+            <li><strong>Золотая рамка.</strong> Иногда украшение сияет золотой обводкой — за такой клик даётся бонус к очкам.</li>
+            <li><strong>После коллекции.</strong> Когда пройдёте все три уровня, откроется кнопка «Дальше» — путь золота, проба, настроение и финальная картинка с символом NEWGOLD.</li>
+          </ol>
+        </div>
+        <div class="howto-actions">
+          <button type="button" class="btn btn--ghost" id="btn-howto-back">На главную</button>
+          <button type="button" class="btn btn--primary" id="btn-howto-play">Начать коллекцию</button>
+        </div>
       </div>
     </section>
 
@@ -60,7 +89,7 @@
         <h2 id="step1-title" class="subtitle">Соберите украшения</h2>
         <p class="jewel-level" id="jewel-level" aria-live="polite">Уровень 1 из 3</p>
         <p class="hint hint--intro" id="step1-intro">
-          Три уровня: по одному каждого вида. Серия ловель без штрафа усиливает баллы; золотая рамка — редкий бонус. Первый пропуск бесплатный.
+          Полные правила — на главной в разделе «Как играть». Здесь: три уровня, по 8 видов на каждом; баллы, комбо и жизни — ниже на экране.
         </p>
         <p class="brand-nudge">NEWGOLD — ювелирный завод: золото и внимание к деталям, как в настоящей мастерской.</p>
         <div id="jewel-field" class="jewel-field" role="application" aria-label="Поле с украшениями"></div>
@@ -203,7 +232,7 @@
           <div class="result-card__inner" id="result-inner">
             <img
               class="result-card__logo"
-              src="assets/logo-newgold-brand.png?v=25"
+              src="assets/logo-newgold-brand.png?v=26"
               width="300"
               height="80"
               alt="NEWGOLD — ювелирный завод"
@@ -248,6 +277,6 @@
   </div>
 
 
-  <script src="js/game.js?v=25" defer></script>
+  <script src="js/game.js?v=26" defer></script>
 </body>
 </html>

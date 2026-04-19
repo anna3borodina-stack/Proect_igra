@@ -1,10 +1,10 @@
 (function () {
   "use strict";
 
-  var GAME_BUILD = "25";
+  var GAME_BUILD = "26";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=25";
-  var ASSET_VER = "25";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=26";
+  var ASSET_VER = "26";
 
   /** Золотая рамка: чуть чаще, чем раньше; множитель к баллам за этот клик */
   var GOLDEN_SPAWN_CHANCE = 0.15;
@@ -124,6 +124,7 @@
   var els = {
     screens: {
       start: document.getElementById("screen-start"),
+      howto: document.getElementById("screen-howto"),
       step1: document.getElementById("screen-step1"),
       step2: document.getElementById("screen-step2"),
       step3: document.getElementById("screen-step3"),
@@ -708,7 +709,7 @@
       });
   }
 
-  document.getElementById("btn-start").addEventListener("click", function () {
+  function beginJewelGame() {
     activeJewels = 0;
     resetStep1();
     resetSteps2to9();
@@ -716,7 +717,26 @@
     if (warm) selectShineCard(warm);
     showScreen("screen-step1");
     startStep1Spawning();
-  });
+  }
+
+  document.getElementById("btn-start").addEventListener("click", beginJewelGame);
+
+  var btnOpenHowto = document.getElementById("btn-open-howto");
+  if (btnOpenHowto) {
+    btnOpenHowto.addEventListener("click", function () {
+      showScreen("screen-howto");
+    });
+  }
+  var btnHowtoBack = document.getElementById("btn-howto-back");
+  if (btnHowtoBack) {
+    btnHowtoBack.addEventListener("click", function () {
+      showScreen("screen-start");
+    });
+  }
+  var btnHowtoPlay = document.getElementById("btn-howto-play");
+  if (btnHowtoPlay) {
+    btnHowtoPlay.addEventListener("click", beginJewelGame);
+  }
 
   els.btnStep1Next.addEventListener("click", function () {
     showScreen("screen-step2");
