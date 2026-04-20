@@ -1,10 +1,10 @@
 (function () {
   "use strict";
 
-  var GAME_BUILD = "26";
+  var GAME_BUILD = "27";
 
-  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=26";
-  var ASSET_VER = "26";
+  var FULL_LOGO_SRC = "assets/logo-newgold-brand.png?v=27";
+  var ASSET_VER = "27";
 
   /** Золотая рамка: чуть чаще, чем раньше; множитель к баллам за этот клик */
   var GOLDEN_SPAWN_CHANCE = 0.15;
@@ -434,6 +434,97 @@
 
   var activeJewels = 0;
 
+  var jewelAudioCtx = null;
+
+  function getJewelAudioContext() {
+    if (!jewelAudioCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      jewelAudioCtx = new AC();
+    }
+    return jewelAudioCtx;
+  }
+
+  /**
+   * Короткий «металлический» звук (как монетка/золото) при клике по украшению.
+   * @param {"catch" | "golden" | "extra"} kind — новый вид / золотая рамка / лишний клик
+   */
+  function playJewelSound(kind) {
+    var ctx = getJewelAudioContext();
+    if (!ctx) return;
+
+    function schedule() {
+      var t0 = ctx.currentTime;
+
+      function envDecay(gainNode, peak, attackMs, decayMs) {
+        var ta = attackMs / 1000;
+        var td = decayMs / 1000;
+        gainNode.gain.setValueAtTime(0.0001, t0);
+        gainNode.gain.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t0 + ta);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, t0 + ta + td);
+      }
+
+      if (kind === "extra") {
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type = "sine";
+        o.frequency.setValueAtTime(210, t0);
+        o.frequency.exponentialRampToValueAtTime(95, t0 + 0.09);
+        envDecay(g, 0.11, 4, 95);
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start(t0);
+        o.stop(t0 + 0.14);
+        return;
+      }
+
+      var isGold = kind === "golden";
+      var peak = isGold ? 0.36 : 0.28;
+
+      var o1 = ctx.createOscillator();
+      var g1 = ctx.createGain();
+      o1.type = "sine";
+      o1.frequency.setValueAtTime(isGold ? 1720 : 1450, t0);
+      o1.frequency.exponentialRampToValueAtTime(isGold ? 740 : 620, t0 + 0.14);
+      envDecay(g1, peak * 0.88, 2, 165);
+      o1.connect(g1);
+      g1.connect(ctx.destination);
+
+      var o2 = ctx.createOscillator();
+      var g2 = ctx.createGain();
+      o2.type = "triangle";
+      o2.frequency.setValueAtTime(isGold ? 2180 : 1820, t0);
+      o2.frequency.exponentialRampToValueAtTime(isGold ? 1020 : 880, t0 + 0.11);
+      envDecay(g2, peak * (isGold ? 0.42 : 0.32), 2, 125);
+      o2.connect(g2);
+      g2.connect(ctx.destination);
+
+      o1.start(t0);
+      o2.start(t0);
+      o1.stop(t0 + 0.24);
+      o2.stop(t0 + 0.19);
+
+      if (isGold) {
+        var o3 = ctx.createOscillator();
+        var g3 = ctx.createGain();
+        o3.type = "sine";
+        o3.frequency.setValueAtTime(3200, t0 + 0.028);
+        o3.frequency.exponentialRampToValueAtTime(1200, t0 + 0.1);
+        envDecay(g3, peak * 0.2, 1, 85);
+        o3.connect(g3);
+        g3.connect(ctx.destination);
+        o3.start(t0 + 0.028);
+        o3.stop(t0 + 0.14);
+      }
+    }
+
+    if (ctx.state === "suspended") {
+      ctx.resume().then(schedule).catch(schedule);
+    } else {
+      schedule();
+    }
+  }
+
   function pickJewelryType() {
     var needed = JEWELRY_TYPES.filter(function (t) {
       return caughtByCls[t.cls] < QUEST_NEED[t.cls];
@@ -525,8 +616,10 @@
           pointsForCatch() * mult * (golden ? GOLDEN_BONUS_MULT : 1)
         );
         jewelScore += pts;
+        playJewelSound(golden ? "golden" : "catch");
       } else {
         comboStreak = 0;
+        playJewelSound("extra");
       }
       updateProgressUI();
       if (isQuestComplete()) {
